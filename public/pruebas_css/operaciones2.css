@@ -1,0 +1,8 @@
+#div_botones .form-control {
+    flex-grow: 1; /* Distribuye el espacio disponible entre los botones */
+    margin-right: 5px; /* Espacio entre los botones */
+}
+
+#div_botones .form-control:last-child {
+    margin-right: 0; /* Elimina el margen derecho del último botón */
+}

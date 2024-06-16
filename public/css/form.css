@@ -1,0 +1,47 @@
+body {
+    background-color: #f0f0f0; /* Color de fondo */
+    margin: 0; /* Elimina el margen predeterminado del body */
+}
+
+.container {
+    background-color: #ffffff; /* Color de fondo del contenedor */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 50px auto; /* Margen superior e inferior de 50px y centrado horizontalmente */
+    max-width: 800px; /* Ancho máximo del contenedor */
+}
+
+.form-label {
+    color: #495057; /* Color del texto */
+}
+
+.form-control {
+    border-radius: 8px; /* Bordes redondeados para los inputs */
+}
+
+.form-check-label {
+    color: #495057; /* Color del texto del checkbox */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Color de fondo del botón */
+    border-color: #007bff; /* Color del borde del botón */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Cambia el color de fondo del botón al pasar el mouse */
+    border-color: #0056b3; /* Cambia el color del borde del botón al pasar el mouse */
+}
+
+.btn-primary:active {
+    background-color: #004380; /* Cambia el color de fondo del botón al hacer clic */
+    border-color: #004380; /* Cambia el color del borde del botón al hacer clic */
+}
+
+@media (max-width: 800px) {
+    .container {
+        padding: 10px;
+        max-width: 355px;
+    }
+}
