@@ -23,10 +23,11 @@ class Product extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function images()
+    public function image_url()
     {
-        return $this->hasMany(Image::class);
+        return asset('storage/' . $this->image);
     }
+
 
     public function discountedProducts()
     {

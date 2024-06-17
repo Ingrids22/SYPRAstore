@@ -15,7 +15,8 @@
                         <div id="carouselExample" class="carousel slide">
                             <div class="carousel-inner">
                               <div class="carousel-item active">
-                                <img src="{{ asset('storage/' . $product->image_rute) }}" class="d-block w-100" alt="...">
+                                <img src="{{ url('storage/' . $product->image_rute) }}" class="d-block w-100" alt="...">
+
                               </div>
                               <div class="carousel-item">
                                 <img src="https://www.airesbair.com/assets/Equipos_Azul_1.png" class="d-block w-100" alt="...">

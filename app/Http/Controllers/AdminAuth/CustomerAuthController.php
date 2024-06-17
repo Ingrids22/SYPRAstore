@@ -18,7 +18,7 @@ class CustomerAuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::guard('customer')->attempt($credentials)) {
+        if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->intended('/customer/home');
         }
