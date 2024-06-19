@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Adminauth;
+namespace App\Http\Controllers\AdminAuth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Adminauth\LoginRequest;
 use App\Providers\RouteServiceProvider;

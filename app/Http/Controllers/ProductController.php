@@ -2,116 +2,125 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\product;
+use App\Models\Product;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
-class productController extends Controller
+class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index() // GET
     {
-        $products = product::all();
+        $products = Product::all();
         return view('admin.products.data')->with('products', $products);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create() // GET
     {
         return view('admin.products.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request) // POST
     {
-        $product = new product();
-        $product->category_id = $request->category_id;
-        $product->supplier_id = $request->supplier_id;
-        $product->name = $request->name;
-        $product->existence = $request->existence;
-        $product->price = $request->price;
-        $product->stock_max = $request->stock_max;
-        $product->stock_min = $request->stock_min;
-        $product->status = $request->status;
-        $product->description = $request->description;
-        
+        // Validación de los datos de entrada
+        $validatedData = $request->validate([
+            'category_id' => 'required|integer|exists:categories,id',
+            'supplier_id' => 'required|integer|exists:suppliers,id',
+            'name' => 'required|string|max:255',
+            'existence' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'stock_max' => 'required|integer|min:0',
+            'stock_min' => 'required|integer|min:0',
+            'status' => 'required|string|in:activo,inactivo',
+            'description' => 'nullable|string',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|'
+        ]);
+
+        $product = new Product();
+        $product->fill($validatedData);
         $product->save();
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = 'product_' . Str::uuid() . '.' . $image->extension();
+                $path = $image->storeAs('images', $imageName, 'public');
+
+                $img = new Image();
+                $img->product_id = $product->id;
+                $img->route = $path;
+                $img->save();
+            }
+        }
 
         return redirect()->route('products.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function show($id) // GET
     {
-        $product = product::find($id);
+        $product = Product::find($id);
         return view('admin.products.mostrar')->with('product', $product);
     }
-        
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit($id) // GET
     {
-        $product = product::find($id);
+        $product = Product::find($id);
         return view('admin.products.edit')->with('product', $product);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\product  $product
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $product = product::find($id);
-        
-        $product->category_id = $request->category_id;
-        $product->supplier_id = $request->supplier_id;
-        $product->name = $request->name;
-        $product->existence = $request->existence;
-        $product->price = $request->price;
-        $product->stock_max = $request->stock_max;
-        $product->stock_min = $request->stock_min;
-        $product->status = $request->status;
-        $product->description = $request->description;
-        
+        $validatedData = $request->validate([
+            'category_id' => 'required|integer|exists:categories,id',
+            'supplier_id' => 'required|integer|exists:suppliers,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'existence' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'stock_max' => 'required|integer|min:0',
+            'stock_min' => 'required|integer|min:0',
+            'status' => 'required|string|in:activo,inactivo',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->fill($validatedData);
         $product->save();
 
-        return redirect()->route('products.index');
+        if ($request->hasFile('images')) {
+            // Eliminar las imágenes existentes si se cargan nuevas
+            $oldImages = $product->images;
+            foreach ($oldImages as $oldImage) {
+                Storage::delete('public/' . $oldImage->route);
+                $oldImage->delete();
+            }
+
+            // Guardar las nuevas imágenes
+            foreach ($request->file('images') as $image) {
+                $imageName = 'product_' . Str::uuid() . '.' . $image->extension();
+                $path = $image->storeAs('images', $imageName, 'public');
+
+                $img = new Image();
+                $img->product_id = $product->id;
+                $img->route = $path;
+                $img->save();
+            }
+        }
+
+        return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id) // GET
+    public function destroy($id) // DELETE
     {
-        $product = product::find($id);
+        $product = Product::find($id);
+
+        // Elimina las imágenes asociadas
+        $oldImages = $product->images;
+        foreach ($oldImages as $oldImage) {
+            Storage::delete('public/' . $oldImage->route);
+            $oldImage->delete();
+        }
+
         $product->delete();
 
         return redirect()->route('products.index');

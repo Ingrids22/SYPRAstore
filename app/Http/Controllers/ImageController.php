@@ -2,102 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\image;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
-class imageController extends Controller
+class ImageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index() // GET
+    public function index()
     {
-        $images = image::all();
+        $images = Image::all();
         return view('admin.images.data')->with('images', $images);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create() // GET
+    public function create()
     {
         return view('admin.images.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request) // POST
+    public function store(Request $request)
     {
-        $image = new image();
-        $image->category_id = $request->product_id;
-        $image->supplier_id = $request->rute;
-        
+        $validatedData = $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+            'route' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Ajustar las reglas según tu necesidad
+        ]);
+
+        $image = new Image();
+        $image->product_id = $validatedData['product_id'];
+
+        if ($request->hasFile('route')) {
+            $imageName = 'product_' . Str::uuid() . '.' . $request->file('route')->extension();
+            $path = $request->file('route')->storeAs('images', $imageName, 'public');
+            $image->route = $path;
+        }
+
         $image->save();
 
         return redirect()->route('images.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) // GET
+    public function show($id)
     {
-        $image = image::find($id);
+        $image = Image::find($id);
         return view('admin.images.mostrar')->with('image', $image);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\image  $image
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $image = image::find($id);
+        $image = Image::find($id);
         return view('admin.images.edit')->with('image', $image);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\image  $image
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $image = image::find($id);
-        
-        $image->category_id = $request->product_id;
-        $image->supplier_id = $request->rute;
-        
+        $validatedData = $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+            'route' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Ajustar las reglas según tu necesidad
+        ]);
+
+        $image = Image::find($id);
+        $image->product_id = $validatedData['product_id'];
+
+        if ($request->hasFile('route')) {
+            Storage::delete('public/' . $image->route);
+
+            $imageName = 'product_' . Str::uuid() . '.' . $request->file('route')->extension();
+            $path = $request->file('route')->storeAs('images', $imageName, 'public');
+            $image->route = $path;
+        }
+
         $image->save();
 
         return redirect()->route('images.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id) // GET
+    public function destroy($id)
     {
-        $image = image::find($id);
-        $image->delete();
+        $image = Image::find($id);
+
+        if ($image) {
+            Storage::delete('public/' . $image->route);
+            $image->delete();
+        }
 
         return redirect()->route('images.index');
     }

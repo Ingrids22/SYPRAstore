@@ -4,19 +4,17 @@ namespace App\Http\Controllers\cliente;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;    
 use Illuminate\Support\Facades\DB;
 
 class ProductoCatalogoController extends Controller
 {
     public function catalogo()
     {
-        // $categories = DB::table('categories')->get();
-        $categories = Category::all();
+        $categories = DB::table('categories')->get();
         $products = DB::table('products')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('images', 'products.id', '=', 'images.product_id')
-            ->select('products.*', 'categories.name as category_name', 'images.rute as image_rute')
+            ->select('products.*', 'categories.name as category_name', 'images.route as image_route')
             ->get();
 
         return view('cliente.catalogo', ['productos' => $products, 'categories' => $categories]);
@@ -28,28 +26,20 @@ class ProductoCatalogoController extends Controller
         $product = DB::table('products')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('images', 'products.id', '=', 'images.product_id')
-            ->select('products.*', 'categories.name as category_name', 'images.rute as image_rute')
+            ->select('products.*', 'categories.name as category_name', 'images.route as image_route')
             ->where('products.id', $id)
             ->first();
-
-        if (!$product) {
-            return redirect()->route('catalogo')->with('error', 'Producto no encontrado');
-        }
 
         return view('cliente.detalle', ['product' => $product, 'categories' => $categories]);
     }
 
     public function filtro_categoria(Request $request)
     {
-        $request->validate([
-            'categories' => 'required|exists:categories,id'
-        ]);
-
         $categories = DB::table('categories')->get();
         $products = DB::table('products')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('images', 'products.id', '=', 'images.product_id')
-            ->select('products.*', 'categories.name as category_name', 'images.rute as image_rute')
+            ->select('products.*', 'categories.name as category_name', 'images.route as image_route')
             ->where('categories.id', $request->categories)
             ->get();
 
@@ -61,13 +51,9 @@ class ProductoCatalogoController extends Controller
         $product = DB::table('products')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('images', 'products.id', '=', 'images.product_id')
-            ->select('products.*', 'categories.name as category_name', 'images.rute as image_rute')
+            ->select('products.*', 'categories.name as category_name', 'images.route as image_route')
             ->where('products.id', $id)
             ->first();
-
-        if (!$product) {
-            return redirect()->back()->with('error', 'Producto no encontrado');
-        }
 
         $cart = session()->get('cart', []);
         if (isset($cart[$id])) {
@@ -77,23 +63,21 @@ class ProductoCatalogoController extends Controller
                 "name" => $product->name,
                 "quantity" => 1,
                 "price" => $product->price,
-                "image" => $product->image_rute
+                "image" => $product->image_route
             ];
         }
 
         session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Producto añadido al carrito correctamente!');
+        return redirect()->back()->with('success', 'Product added to cart successfully!');
     }
 
     public function actualizarCarrito(Request $request)
     {
         if ($request->id && $request->quantity) {
             $cart = session()->get('cart');
-            if (isset($cart[$request->id])) {
-                $cart[$request->id]["quantity"] = $request->quantity;
-                session()->put('cart', $cart);
-                session()->flash('success', 'Carrito actualizado correctamente');
-            }
+            $cart[$request->id]["quantity"] = $request->quantity;
+            session()->put('cart', $cart);
+            session()->flash('success', 'Cart updated successfully');
         }
     }
 
@@ -104,8 +88,8 @@ class ProductoCatalogoController extends Controller
             if (isset($cart[$request->id])) {
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
-                session()->flash('success', 'Producto eliminado correctamente');
             }
+            session()->flash('success', 'Product removed successfully');
         }
     }
 
@@ -117,7 +101,7 @@ class ProductoCatalogoController extends Controller
     public function vaciarCarrito()
     {
         session()->forget('cart');
-        return redirect()->back()->with('success', 'Carrito vaciado correctamente!');
+        return redirect()->back()->with('success', 'Cart emptied successfully!');
     }
 
     public function pagarCarrito()
@@ -131,7 +115,7 @@ class ProductoCatalogoController extends Controller
         $products = DB::table('products')
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->leftJoin('images', 'products.id', '=', 'images.product_id')
-            ->select('products.*', 'categories.name as category_name', 'images.rute as image_rute')
+            ->select('products.*', 'categories.name as category_name', 'images.route as image_route')
             ->get();
 
         return view('cliente.carrito.products', ['products' => $products, 'categories' => $categories]);

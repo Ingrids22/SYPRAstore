@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Adminauth;
+namespace App\Http\Controllers\AdminAuth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;

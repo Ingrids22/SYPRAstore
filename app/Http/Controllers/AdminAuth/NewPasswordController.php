@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Adminauth;   
+namespace App\Http\Controllers\AdminAuth;   
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;

@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Adminauth\CustomerAuthController;
-use App\Http\Controllers\Auth\AdminAuthController; // Importa el controlador aquí
+use App\Http\Controllers\Auth\CustomerAuthController;
+use App\Http\Controllers\Adminauth\AdminAuthController;
+use App\Http\Controllers\AdminProfileController; // Importa el controlador aquí
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,7 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('customer')->group(function () {
     Route::get('login', [CustomerAuthController::class, 'showLoginForm'])->name('customer.login');
-    Route::post('login', [CustomerAuthController::class, 'login']);
+    Route::post('login', [CustomerAuthController::class, 'login'])->name('customer.log');
     Route::post('logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
 });
 
@@ -59,7 +60,12 @@ Route::prefix('admin')->group(function () {
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('login', [AdminAuthController::class, 'login'])->name('admin.log');
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+    
+    Route::get('/register', [AdminAuthController::class, 'showRegistrationForm'])->name('admin.register');
+    Route::post('/register', [AdminAuthController::class, 'register']);
+    Route::get('admin/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
 
+   
     Route::middleware(['auth:admin'])->group(function () {
         Route::get('home', function () {
             return view('admin.home');

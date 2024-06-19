@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Adminauth;
+namespace App\Http\Controllers\AdminAuth;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
-use App\Models\Customer;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -34,26 +33,23 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'photo' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.Admin::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
-        $customer = Admin::create([
+    
+        $admin = Admin::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'discount' => 0,
             'photo' => $request->photo,
-            'type' => 'standar',
-            'status' => 'ACTIVO',
         ]);
-
-        event(new Registered($customer));
-        Auth::guard('admin')->login($user);
-
-        Auth::login($customer);
-
+    
+        event(new Registered($admin));
+    
+        Auth::guard('admin')->login($admin);
+    
         return redirect(RouteServiceProvider::ADMIN_HOME);
     }
+        
 }
