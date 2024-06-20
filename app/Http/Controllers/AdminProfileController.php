@@ -26,7 +26,7 @@ class AdminProfileController extends Controller
     /**
      * Update the admin's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(AdminProfileUpdateRequest $request): RedirectResponse
     {
         $admin = Auth::guard('admin')->user(); // Obtener el administrador autenticado
         $admin->fill($request->validated());

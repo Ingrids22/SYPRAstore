@@ -63,14 +63,11 @@ Route::prefix('admin')->group(function () {
     
     Route::get('/register', [AdminAuthController::class, 'showRegistrationForm'])->name('admin.register');
     Route::post('/register', [AdminAuthController::class, 'register']);
-    Route::get('admin/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::patch('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+    Route::delete('/profile/delete', [AdminProfileController::class, 'destroy'])->name('admin.profile.destroy');
 
-   
-    Route::middleware(['auth:admin'])->group(function () {
-        Route::get('home', function () {
-            return view('admin.home');
-        })->name('admin.home');
-    });
+
 });
 
 
@@ -96,6 +93,7 @@ Route::get('/pagar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoCont
 Route::get('/producto', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'products'])->name('products');
 
 Route::view('/plantillacarrito', 'cliente/carrito/layout');
+
 
 
 

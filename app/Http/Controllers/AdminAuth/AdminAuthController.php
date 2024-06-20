@@ -22,11 +22,11 @@ class AdminAuthController extends Controller
 
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('/admin/home');
+            return redirect()->intended('/admin/dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'The provided credentials do jujthyfgdftujjyhgdfd not match our records.',
         ]);
     }
 
