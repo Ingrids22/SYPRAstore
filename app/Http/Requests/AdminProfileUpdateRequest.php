@@ -20,7 +20,7 @@ class AdminProfileUpdateRequest extends FormRequest
             'name' => ['string', 'max:255'],
             'last_name' => ['string', 'max:255'],
             'photo' => ['string', 'max:255'],
-            'email' => ['email', 'max:255', Rule::unique(Admin::class)->ignore($this->user()->id)],
+            'email' => ['email', 'max:255', Rule::unique(Admin::class)],
         ];
     }
 }
