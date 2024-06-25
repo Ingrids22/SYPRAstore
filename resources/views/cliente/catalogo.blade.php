@@ -37,7 +37,7 @@
                         @if ($product->status == 'activo')
                             <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Activo</div>
                         @endif
-                        <img class="card-img-top" src="{{ asset('storage/' . $product->image_route) }}" alt="" />
+                        <img src="{{ $product->image_url }}" class="card-img-top" alt="{{ $product->name }}">
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <h5 class="fw-bolder">{{ $product->name }}</h5>

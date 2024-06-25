@@ -13,6 +13,8 @@ class Product extends Model
         'category_id', 'supplier_id', 'name', 'existence', 'price', 'stock_max', 'stock_min', 'status', 'description', 'image'
     ];
 
+    protected $appends = ['image_url'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -23,11 +25,10 @@ class Product extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function image_url()
+    public function getImageUrlAttribute()
     {
         return asset('storage/' . $this->image);
     }
-
 
     public function discountedProducts()
     {

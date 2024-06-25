@@ -1,62 +1,55 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>@yield('Titulo')</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link rel="stylesheet" href="css/stylespregfrec.css">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@yield('Titulo')</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/stylespregfrec.css">
 
-        <link href="{{ asset('css/stylecarrito.css') }}" rel="stylesheet">
-        <link href="{{ asset('css/stylefooter.css') }}" rel="stylesheet">
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/y-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="/assets/css/styles.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="/pruebas_css/operaciones2.css">
+    <link href="{{ asset('css/stylecarrito.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/stylefooter.css') }}" rel="stylesheet">
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/assets/css/styles.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/pruebas_css/operaciones2.css">
+</head>
+<style>
+    .navbar-logo {
+        max-width: 130px;
+        height: auto;
+    }
 
+    .btn-circle {
+        width: 60px;
+        height: 60px;
+        padding: 0;
+        border-radius: 50%;
+        overflow: hidden;
+    }
 
-
-    </head>
-    <style>
-        .navbar-brand img {
-            max-width: 130px; 
-            height: auto;
-        }
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-circle {
-            width: 60px;
-            height: 60px;
-            padding: 0;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .btn-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
+    .btn-circle img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+    
     <body>
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand">
-                    <img src="https://scontent.fgdl3-1.fna.fbcdn.net/v/t39.30808-6/421587958_903179931599301_6132880923810736407_n.png?stp=dst-jpg&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=XFjUDsK9TxMAb5s55Jt&_nc_ht=scontent.fgdl3-1.fna&oh=00_AfCUWn3Abpg7FpnehhbGglVm7pvquylaIBe3ctjmJ-As6w&oe=6630CB39" alt=></a>
+                    <img src="https://scontent.fgdl3-1.fna.fbcdn.net/v/t39.30808-6/421587958_903179931599301_6132880923810736407_n.png?stp=dst-jpg&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=KYCTUEc8rHEQ7kNvgEp_hX-&_nc_ht=scontent.fgdl3-1.fna&oh=00_AYC0wq8mxTA5WU1gkdTSE4zCw0hPShQG2vwoGBra18TZIQ&oe=6665BF79" alt="" class="navbar-logo"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -140,8 +133,6 @@
                     </form>
         </nav>
         @yield('contenido')
-        <header>
-        </header>
         <section class="py-5">
         </section>
         <footer class="footer-section">
@@ -181,10 +172,9 @@
                                     <li><a href="{{ url('/catalogo') }}">Catálogo</a></li>
                                     <li><a href="{{ url('/contacto') }}">Contacto</a></li>
                                     <li><a href="{{ url('/nosotros') }}">Sobre nosotros</a></li>
-                                    <li><a href="#">Llamanos</a></li>
                                     <li><a href="#">Envíos</a></li>
+                                    <li><a href="{{ url('/preguntasfrec') }}">Preguntas Frecuentes</a></li>
                                     <li><a href="#">Facturación</a></li>
-                                    <li><a href="#">Preguntas Frecuentes</a></li>
                                 </ul>
                             </div>
                         </div>
