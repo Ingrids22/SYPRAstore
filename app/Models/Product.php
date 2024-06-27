@@ -25,7 +25,7 @@ class Product extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function getImageUrlAttribute()
+    public function route()
     {
         return asset('storage/' . $this->image);
     }
