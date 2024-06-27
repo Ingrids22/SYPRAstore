@@ -74,8 +74,11 @@ Route::prefix('admin')->group(function () {
 // Aquí las rutas que no requieren autenticación 
 
 // Vistas pag web
-Route::view('/catalogo', '/cliente/catalogo');
-Route::view('/detalle', '/cliente/detalle');
+Route::view('/homepage','/cliente/her_home');
+Route::view('/nosotros','/cliente/her_nosotros');
+Route::view('/catalogo','/cliente/catalogo');
+Route::view('/detalle','/cliente/detalle');
+Route::view('/contacto','/cliente/contacto');
 
 
 // Controladores

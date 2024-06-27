@@ -10,7 +10,7 @@
         <div class="container-fluid px-xl-4 py-5">
             <div class="row align-items-center g-xl-4 py-5">
                 <div class="col-sm-8 col-lg-6">
-                    <img src="https://th.bing.com/th/id/OIG.6.vSxJTq5uMyRJley8xJ?pid=ImgGn" 
+                    <img src="https://www.airesbair.com/assets/BAirHome_HomeFondo.jpg" 
                     class="d-block mx-lg-auto img-fluid" 
                     alt="Imagen de ejemplo" 
                     loading="lazy">
@@ -119,7 +119,7 @@
                 <div class="col-lg-6 mb-4 text-center text-lg-start">
                     <div class="lc-block mb-3">
                         <div editable="rich">
-                            <h2 class="fw-bold display-3 ">Ofrecemos products<br>de calidad para tu servicio.
+                            <h2 class="fw-bold display-3 ">Ofrecemos productos<br>de calidad para tu servicio.
     
                             </h2>
                         </div>
@@ -139,7 +139,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <img src="https://th.bing.com/th/id/OIG.hPfe0N5.gpWVU3pNQvOa?pid=ImgGn" 
+                    <img src="https://media.istockphoto.com/id/1464462569/es/foto/familia-feliz-descansando-bajo-aire-acondicionado-en-la-pared-beige-en-casa.jpg?s=612x612&w=0&k=20&c=UPO95WRF6fkimceOKYWlBBYLzQ1HbB1Zlbqp0ULnpOQ=" 
                     class="d-block mx-lg-auto img-fluid" 
                     alt="Imagen de ejemplo" 
                     loading="lazy" 

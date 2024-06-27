@@ -3,36 +3,29 @@
 namespace App\Http\Controllers\cliente;
 
 use App\Http\Controllers\Controller;
+use DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\Product;
+use App\Models\Category;
 
 class ProductoCatalogoController extends Controller
 {
     public function catalogo()
     {
-        $categories = DB::table('categories')->get();
-        $products = DB::table('products')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->leftJoin('images', 'products.id', '=', 'images.product_id')
-            ->select('products.*', 'categories.name as category_name', 'images.route as image_route')
-            ->get();
+        $categories = Category::all();
+        $products = Product::with('category', 'images')->get();
 
         return view('cliente.catalogo', ['productos' => $products, 'categories' => $categories]);
     }
 
     public function detalle($id)
     {
-        $categories = DB::table('categories')->get();
-        $product = DB::table('products')
-            ->join('categories', 'products.category_id', '=', 'categories.id')
-            ->leftJoin('images', 'products.id', '=', 'images.product_id')
-            ->select('products.*', 'categories.name as category_name', 'images.route as image_route')
-            ->where('products.id', $id)
-            ->first();
+        $categories = Category::all();
+        $product = Product::with('category', 'images')->findOrFail($id);
 
         return view('cliente.detalle', ['product' => $product, 'categories' => $categories]);
     }
-
+    
     public function filtro_categoria(Request $request)
     {
         $categories = DB::table('categories')->get();

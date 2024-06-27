@@ -10,7 +10,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id', 'supplier_id', 'name', 'existence', 'price', 'stock_max', 'stock_min', 'status', 'description', 'image'
+        'category_id', 'supplier_id', 'name', 'existence', 'price', 'stock_max', 'stock_min', 'status', 'description'
     ];
 
     protected $appends = ['image_url'];
@@ -25,9 +25,15 @@ class Product extends Model
         return $this->belongsTo(Supplier::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
     public function getImageUrlAttribute()
     {
-        return asset('storage/' . $this->image);
+        $image = $this->images()->first();
+        return $image ? asset('storage/' . $image->route) : null;
     }
 
     public function discountedProducts()

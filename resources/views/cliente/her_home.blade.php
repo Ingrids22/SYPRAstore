@@ -53,7 +53,7 @@
                 <div class="col">
                     <div class="lc-block mb-4">
                         <img class="img-fluid" 
-                        src="https://th.bing.com/th/id/OIG.fPksLFjZm4PPdiNouG2o?pid=ImgGn" 
+                        src="https://media.istockphoto.com/id/1077105848/es/foto/concepto-de-compras-compra-y-entrega.jpg?s=612x612&w=0&k=20&c=3aULcniZeCknySFht6ZL2w8OvkJu4fgdWincwr308bk=" 
                         sizes="(max-width: 1080px) 100vw, 1080px" 
                         width="1080" 
                         height="1080" 
@@ -64,7 +64,7 @@
                         <div editable="rich">
 
                             <h2>Servicio de entrega</h2>
-                            <p class="lead text-muted">shippers a toda la Republica Mexicana.</p>
+                            <p class="lead text-muted">Envios a toda la Republica Mexicana.</p>
 
                         </div>
                     </div><!-- /lc-block -->
@@ -72,7 +72,7 @@
                 <div class="col">
                     <div class="lc-block mb-4">
                         <img class="img-fluid" 
-                        src="https://th.bing.com/th/id/OIG.7bF_eQyQejkEjXHu8IQM?pid=ImgGn" 
+                        src="https://media.istockphoto.com/id/1316733101/es/foto/servicio-de-aire-acondicionado-en-el-interior-t%C3%A9cnico-de-limpieza-de-aire-acondicionado-abri%C3%B3.jpg?s=612x612&w=0&k=20&c=qpOUDyLZt5gLaQZwaGh-0eO8uXUmWDAT6cg95MoWpok=" 
                         sizes="(max-width: 1080px) 100vw, 1080px" 
                         width="1080" 
                         height="1080" 
@@ -91,7 +91,7 @@
                 <div class="col">
                     <div class="lc-block mb-4">
                         <img class="img-fluid" 
-     src="https://th.bing.com/th/id/OIG.mS0_5Dnf5RuZ9nXI.Gt7?w=1024&h=1024&rs=1&pid=ImgDetMain" 
+     src="https://cdn.pixabay.com/photo/2019/07/13/10/25/payment-4334491_1280.jpg" 
      sizes="(max-width: 1024px) 100vw, 1024px" 
      width="1024" 
      height="1024" 
@@ -110,7 +110,7 @@
                 <div class="col">
                     <div class="lc-block mb-4">
                         <img class="img-fluid" 
-                        src="https://th.bing.com/th/id/OIG.5piEhmthu0JfacAI9cjG?pid=ImgGn" 
+                        src="https://cdn.pixabay.com/photo/2019/05/10/12/36/contact-us-4193401_1280.jpg" 
                         sizes="(max-width: 1024px) 100vw, 1024px" 
                         width="1024" 
                         height="1024" 
@@ -233,7 +233,7 @@
                     {{-- <a href="{{ url('/linea_platinum') }}" class="btn btn-primary btn-lg" role="button"> --}}
                         <div class="lc-block mb-4">
                             &nbsp
-                            <img class="img-fluid" role="button" src="https://www.airesbair.com/assets/Equipos_Platinum.png" srcset="https://www.airesbair.com/assets/Equipos_Platinum.png 1080w">
+                            <img class="img-fluid" role="button" src="https://www.airesbair.com/assets/Equipos_Platinum.png" srcset="https://www.airesbair.com/assets/Equipos_Platinum.png ">
                         </div>
                         <div class="card-body py-6">
                             <div class="lc-block mb-3">
