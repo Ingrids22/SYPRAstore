@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Adminauth\AdminAuthController;
 use App\Http\Controllers\AdminProfileController; // Importa el controlador aquí
+use App\Http\Controllers\OrderController;   
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,7 @@ Route::prefix('admin')->group(function () {
 // Vistas pag web
 Route::view('/catalogo', '/cliente/catalogo');
 Route::view('/detalle', '/cliente/detalle');
+Route::view('/ordenes', '/cliente/ordenescliente');
 
 
 // Controladores
@@ -91,8 +93,12 @@ Route::get('/vaciar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoCon
 Route::get('/mostrar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'mostrarCarrito'])->name('carrito.mostrar');
 Route::get('/pagar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'pagarCarrito'])->name('carrito.pagar');
 Route::get('/producto', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'products'])->name('products');
+Route::get('/proceso_pedido', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'procesoPedido'])->name('carrito.procesopedido');
 
 Route::view('/plantillacarrito', 'cliente/carrito/layout');
+Route::middleware(['auth', 'role:client'])->group(function() {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+});
 
 
 

@@ -104,6 +104,15 @@ class ProductoCatalogoController extends Controller
         return redirect()->back()->with('success', 'Cart emptied successfully!');
     }
 
+    public function procesopedido(Request $request){
+        if (ProductoCatalogoController::getContent()->count() > 0) {
+            // procesamiento
+        } else {
+            // redirect
+            return redirect('/pagar_carrito');
+        }
+    }
+    
     public function pagarCarrito()
     {
         // Implementar lógica de pago

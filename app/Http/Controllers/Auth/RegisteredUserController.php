@@ -14,6 +14,12 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
+    protected function redirectTo(){
+        $user = Auth::user(); // Obtener el usuario autenticado
+        if ($user && $user->hasRole('cliente')) { // Verificar si el usuario tiene el rol 'cliente'
+            return "/carrito/procesopedido";
+        }
+    }
     /**
      * Display the registration view.
      */
@@ -32,6 +38,8 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
+            'celular' => ['required', 'string', 'max:255'],
+            'direccion' => ['required', 'string', 'max:255'],
             'photo' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.Customer::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -47,7 +55,7 @@ class RegisteredUserController extends Controller
             'type' => 'standar',
             'status' => 'ACTIVO',
         ]);
-
+    
         event(new Registered($customer));
         Auth::guard('customer')->login($customer);
 
@@ -55,4 +63,5 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
 }
