@@ -36,4 +36,12 @@ class CustomerAuthController extends Controller
 
         return redirect('/customer/login');
     }
+
+    public function redirectPath()
+    {
+        if(Auth::customer()->hasRole('customer')){
+            return "/carrito/procesopedido";
+        }
+        return "/";
+    }
 }
