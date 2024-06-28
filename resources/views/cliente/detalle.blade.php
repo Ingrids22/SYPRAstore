@@ -28,10 +28,32 @@
                     </div>
                 </div>
             </div>
+<<<<<<< Updated upstream
             <div class="col-lg-6">
                 <div class="lc-block mb-4">
                     <div editable="rich">
                         <h2 class="fw-bold display-5">{{ $product->name }}</h2>
+=======
+        </div>
+        <div class="col-lg-6">
+            <div class="lc-block mb-4">
+                <div editable="rich">
+                    <h2 class="fw-bold display-5">{{ $product->name }}</h2>
+                </div>
+            </div>
+            <div class="lc-block mb-5">
+                <div editable="rich">
+                    <p>{{ $product->description }} MXN</p>
+                </div>
+            </div>
+            <div class="lc-block d-sm-flex align-items-center mb-4 overflow-hidden position-relative">
+                <div class="d-inline-flex">
+                    <div>
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon" class="text-success">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                        </svg>
+>>>>>>> Stashed changes
                     </div>
                 </div>
                 <div class="lc-block mb-5">
@@ -92,8 +114,39 @@
                     </div>
                 </div>
             </div>
+<<<<<<< Updated upstream
             <div class="lc-block mb-2">
                 <a class="btn btn-primary btn-lg" href="javascript:history.back()" role="button">Regresar</a>
+=======
+            <div class="lc-block d-sm-flex align-items-center mb-4">
+                <div class="d-inline-flex">
+                    <div>
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon" class="text-success">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                        </svg>
+                    </div>
+                    <div class="ms-3 align-self-center" editable="rich">
+                        <p>Existencia: {{ $product->existence }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lc-block d-sm-flex align-items-center mb-4">
+                <div class="d-inline-flex">
+                    <div>
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" lc-helper="svg-icon" class="text-success">
+                            <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path fill-rule="evenodd" d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z"></path>
+                        </svg>
+                    </div>
+                    <div class="ms-3 align-self-center" editable="rich">
+                        <p>Categoría: {{ $product->category->name }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lc-block mb-3">
+                <a href="{{ route('carrito.agregar', $product->id) }}" class="btn btn-warning btn-block text-center" role="button">Añadir al carrito</a>
+>>>>>>> Stashed changes
             </div>
         </div>
     </div>
