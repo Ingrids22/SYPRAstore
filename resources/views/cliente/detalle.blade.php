@@ -48,7 +48,7 @@
             </div>
             <div class="lc-block mb-5">
                 <div editable="rich">
-                    <p class="lead text-muted">{{ $product->description }}</p>
+                    <p>{{ $product->description }} MXN</p>
                 </div>
             </div>
             <div class="lc-block d-sm-flex align-items-center mb-4 overflow-hidden position-relative">
@@ -73,7 +73,7 @@
                         </svg>
                     </div>
                     <div class="ms-3 align-self-center" editable="rich">
-                        <p>Modelo: {{ $product->id }}</p>
+                        <p>Existencia: {{ $product->existence }}</p>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                         </svg>
                     </div>
                     <div class="ms-3 align-self-center" editable="rich">
-                        <p>Color: {{ $product->color }}</p>
+                        <p>Categoría: {{ $product->category->name }}</p>
                     </div>
                 </div>
             </div>
