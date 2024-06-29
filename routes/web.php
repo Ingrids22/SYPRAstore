@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Adminauth\AdminAuthController;
 use App\Http\Controllers\AdminProfileController; // Importa el controlador aquí
 use App\Http\Controllers\OrderController;   
+use App\Http\Controllers\OrderDetailController;  
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +87,8 @@ Route::view('/contacto','/cliente/contacto');
 Route::get('/catalogo', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'catalogo'])->name('catalogo');
 Route::get('/detalle/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'detalle'])->name('detalle');
 Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'filtro_categoria'])->name('catalogo.categoria');
+Route::resource('/order_details',OrderDetailController::class);
+Route::resource('/orders',OrderController::class);
 
 // Carrito
 Route::get('/agregar_carrito/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'agregarCarrito'])->name('carrito.agregar');

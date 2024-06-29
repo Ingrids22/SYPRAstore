@@ -9,13 +9,22 @@ class Order extends Model
 {
     use HasFactory;
 
-    public function Customer()
+    protected $fillable = [
+        'customer_id', 'fecha_orden', 'status'
+    ];
+
+    public function customer()
     {
         return $this->belongsTo(Customer::class);
     }
 
-    public function products()
+    public function orderDetails()
     {
-        return $this->belongsToMany(Product::class)->withPivot('quantity');
+        return $this->hasMany(OrderDetail::class);
+    }
+
+    public function shippers()
+    {
+        return $this->hasMany(Shipper::class);
     }
 }
