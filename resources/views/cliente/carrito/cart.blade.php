@@ -47,12 +47,14 @@
         <tr>
             <td colspan="5" class="text-right"><h3><strong>Total ${{ $total }}</strong></h3></td>
         </tr>
-        <tr>
-            <td colspan="5" class="text-right">
-                <a href="{{ url('/catalogo') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a>
-                <button class="btn btn-success">Checkout</button>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="5" class="text-right">
+                    <a href="{{ url('/catalogo') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a>
+                    <form action="{{ route('carrito.crear') }}" method="POST" style="display:inline;">
+                        @csrf
+                    <button type="submit" class="btn btn-success">Checkout</button>
+                </td>
+            </tr>
     </tfoot>
 </table>
 @endsection

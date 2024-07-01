@@ -38,8 +38,8 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'celular' => ['required', 'string', 'max:255'],
-            'direccion' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:100'],
             'photo' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.Customer::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -48,10 +48,11 @@ class RegisteredUserController extends Controller
         $customer = Customer::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
+            'phone' => $request->phone, 
+            'address' => $request->address, 
+            'photo' => $request->photo,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'discount' => 0,
-            'photo' => $request->photo,
             'type' => 'standar',
             'status' => 'ACTIVO',
         ]);

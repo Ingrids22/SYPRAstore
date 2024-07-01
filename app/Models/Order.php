@@ -10,7 +10,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'customer_id', 'fecha_orden', 'status'
+        'customer_id', 'total', 'fecha_orden', 'status'
     ];
 
     public function customer()
