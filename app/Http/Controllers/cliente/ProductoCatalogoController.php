@@ -111,6 +111,12 @@ class ProductoCatalogoController extends Controller
         // Implementar lógica de pago
     }
 
+    public function crearPedido(Request $request)
+    {
+        // Llamar al método del OrderController para crear la orden
+        return app('App\Http\Controllers\OrderController')->store($request);
+    }
+    
     public function products()
     {
         $categories = DB::table('categories')->get();

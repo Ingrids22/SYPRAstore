@@ -4,20 +4,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Adminauth\AdminAuthController;
-use App\Http\Controllers\AdminProfileController; // Importa el controlador aquí
-use App\Http\Controllers\OrderController;   
-use App\Http\Controllers\OrderDetailController;  
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\AdminProfileController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderDetailController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +16,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 require __DIR__.'/auth.php';
+
+Route::view('/plantillacarrito', 'cliente/carrito/layout');
+Route::middleware(['auth:customer', 'role:client'])->group(function() {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+});
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
@@ -39,8 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Aquí todas las rutas que requieran autenticación del cliente
-
 Route::prefix('customer')->group(function () {
     Route::get('login', [CustomerAuthController::class, 'showLoginForm'])->name('customer.login');
     Route::post('login', [CustomerAuthController::class, 'login'])->name('customer.log');
@@ -49,7 +41,6 @@ Route::prefix('customer')->group(function () {
 
 Route::middleware(['auth:client'])->group(function () {
     Route::get('/client/home', function () {
-        // Lógica para el cliente autenticado...
         return view('client.home');
     });
 
@@ -68,29 +59,21 @@ Route::prefix('admin')->group(function () {
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::patch('/profile/update', [AdminProfileController::class, 'update'])->name('admin.profile.update');
     Route::delete('/profile/delete', [AdminProfileController::class, 'destroy'])->name('admin.profile.destroy');
-
-
 });
 
-
-// Aquí las rutas que no requieren autenticación 
-
-// Vistas pag web
 Route::view('/homepage','/cliente/her_home');
 Route::view('/nosotros','/cliente/her_nosotros');
 Route::view('/catalogo','/cliente/catalogo');
 Route::view('/detalle','/cliente/detalle');
 Route::view('/contacto','/cliente/contacto');
 
-
-// Controladores
 Route::get('/catalogo', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'catalogo'])->name('catalogo');
 Route::get('/detalle/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'detalle'])->name('detalle');
 Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'filtro_categoria'])->name('catalogo.categoria');
-Route::resource('/order_details',OrderDetailController::class);
-Route::resource('/orders',OrderController::class);
+Route::resource('/order_details', OrderDetailController::class);
+Route::resource('/orders', OrderController::class);
+Route::post('/carrito/crear', [OrderController::class, 'crearPedido'])->name('carrito.crear');
 
-// Carrito
 Route::get('/agregar_carrito/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'agregarCarrito'])->name('carrito.agregar');
 Route::post('/actualizar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'actualizarCarrito'])->name('carrito.actualizar');
 Route::delete('/quitar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'quitarCarrito'])->name('carrito.quitar');
@@ -99,14 +82,5 @@ Route::get('/mostrar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoCo
 Route::get('/pagar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'pagarCarrito'])->name('carrito.pagar');
 Route::get('/producto', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'products'])->name('products');
 Route::get('/proceso_pedido', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'procesoPedido'])->name('carrito.procesopedido');
-
-Route::view('/plantillacarrito', 'cliente/carrito/layout');
-Route::middleware(['auth', 'role:client'])->group(function() {
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-});
-
-
-
-
 
 
