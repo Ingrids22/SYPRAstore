@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\cliente;
 
 use App\Http\Controllers\Controller;
-use DB;
+// use DB;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class ProductoCatalogoController extends Controller
 {
@@ -25,7 +26,7 @@ class ProductoCatalogoController extends Controller
 
         return view('cliente.detalle', ['product' => $product, 'categories' => $categories]);
     }
-    
+
     public function filtro_categoria(Request $request)
     {
         $categories = DB::table('categories')->get();
@@ -105,7 +106,7 @@ class ProductoCatalogoController extends Controller
             return redirect('/pagar_carrito');
         }
     }
-    
+
     public function pagarCarrito()
     {
         // Implementar lógica de pago
@@ -116,7 +117,7 @@ class ProductoCatalogoController extends Controller
         // Llamar al método del OrderController para crear la orden
         return app('App\Http\Controllers\OrderController')->store($request);
     }
-    
+
     public function products()
     {
         $categories = DB::table('categories')->get();

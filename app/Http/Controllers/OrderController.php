@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
@@ -14,7 +15,7 @@ class OrderController extends Controller
     {
         // Obtener todas las órdenes del cliente autenticado
         $orders = Order::where('id', auth()->id())->get();
-        
+
         // Pasar las órdenes a la vista
         return view('cliente.ordenescliente', compact('orders'));
     }
@@ -74,16 +75,52 @@ class OrderController extends Controller
         return redirect()->route('orders.index');
     }
 
+    public function verOrdenes()
+{
+    $user = Auth::user(); // Obtener el usuario autenticado
+    $customer_id = $user->id; // Obtener el ID del cliente desde el usuario autenticado
+
+    // Obtener todas las órdenes del cliente actual
+    $orders = Order::where('customer_id', $customer_id)->get();
+
+    return view('cliente.ordenescliente', compact('orders'));
+}
+
     public function crearPedido(Request $request)
     {
+        $user = Auth::user(); // Obtener el usuario autenticado
+        $customer_id = $user->id;
+
+        $quantity = $request->input('quantity');
+        $price = $request->input('price');
+        $producto = $request->input('producto');
+
             $order = new Order();
-            $order->customer_id = 1;
-            $order->total = 100.00;
+            $order->customer_id = $customer_id;
+            $order->total = $quantity;
             $order->fecha_orden = now();
             $order->status = 'activo';
             $order->save();
 
-            return view('/cliente/ordenescliente');
+            // $details = session('cart')[$id];
+            // dd($producto);
+
+            $orderDetail = new OrderDetail();
+            $orderDetail->order_id = $customer_id;
+            $orderDetail->product_id = $producto;
+            $orderDetail->quantity = $quantity;
+            $orderDetail->price = $price;
+            $orderDetail->save();
+
+            $product = Product::find($producto);
+            if ($product) {
+                $product->existence -= $quantity;
+                $product->save();
+            }
+
+            $orders = Order::where('customer_id', $customer_id)->get();
+
+            return view('/cliente/ordenescliente', compact('orders'), compact('producto'));
 
 
             // return response()->json(['message' => 'Pedido creado exitosamente', 'order_id' => $order->id]);

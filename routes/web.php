@@ -54,7 +54,7 @@ Route::prefix('admin')->group(function () {
     Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
     Route::post('login', [AdminAuthController::class, 'login'])->name('admin.log');
     Route::post('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-    
+
     Route::get('/register', [AdminAuthController::class, 'showRegistrationForm'])->name('admin.register');
     Route::post('/register', [AdminAuthController::class, 'register']);
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
@@ -74,6 +74,9 @@ Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalo
 Route::resource('/order_details', OrderDetailController::class);
 Route::resource('/orders', OrderController::class);
 Route::post('/crear_pedido', [OrderController::class, 'crearPedido'])->name('carrito.crear');
+
+Route::get('/cliente/ordenescliente', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenes');
+
 
 Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['role:customer']], function () {
