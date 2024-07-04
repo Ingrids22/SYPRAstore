@@ -5,11 +5,12 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CheckRole
 {
     /**
-     * Handle an incoming request.
+     * Maneja una solicitud entrante.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -18,31 +19,15 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, $role)
     {
-        $guard = Auth::guard();
+        $user = Auth::user();
 
-        if ($guard->check()) {
-            switch ($guard->getName()) {
-                case 'customer':
-                    $user = $guard->user();
-                    if ($user->role === $role) {
-                        return $next($request);
-                    }
-                    break;
+        Log::info('Usuario autenticado:', ['user' => $user]);
 
-                case 'admin':
-                    $user = $guard->user();
-                    if ($user->role === $role) {
-                        return $next($request);
-                    }
-                    break;
-
-                default:
-                    // Otros tipos de guardia si es necesario
-                    break;
-            }
+        if ($user && $user->role === $role) {
+            return $next($request);
         }
 
-        // Si el usuario no tiene el rol correcto, puedes redirigirlo o retornar una respuesta de error.
+        Log::warning('Acceso no autorizado:', ['user' => $user, 'role' => $role]);
         return response('Unauthorized.', 401);
     }
 }

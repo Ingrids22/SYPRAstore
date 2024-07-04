@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\cliente\ProductoCatalogoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\CustomerAuthController;
@@ -72,7 +73,10 @@ Route::get('/detalle/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoContr
 Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'filtro_categoria'])->name('catalogo.categoria');
 Route::resource('/order_details', OrderDetailController::class);
 Route::resource('/orders', OrderController::class);
-Route::post('/carrito/crear', [OrderController::class, 'crearPedido'])->name('carrito.crear');
+Route::post('/crear_pedido', [OrderController::class, 'crearPedido'])->name('carrito.crear');
+
+Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['role:customer']], function () {
 
 Route::get('/agregar_carrito/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'agregarCarrito'])->name('carrito.agregar');
 Route::post('/actualizar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'actualizarCarrito'])->name('carrito.actualizar');
@@ -84,3 +88,6 @@ Route::get('/producto', [\App\Http\Controllers\cliente\ProductoCatalogoControlle
 Route::get('/proceso_pedido', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'procesoPedido'])->name('carrito.procesopedido');
 
 
+
+});
+});

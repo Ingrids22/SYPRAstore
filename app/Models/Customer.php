@@ -26,7 +26,6 @@ class Customer extends Authenticatable
         'password',
         'discount',
         'photo',
-        'type',
         'status',
         'role',
 

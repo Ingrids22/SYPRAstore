@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('password',1024);
             $table->rememberToken();
             $table->string('photo');
-            $table->string('type');
+            $table->string('role');
             $table->string('status', 10)->default("activo");
             $table->timestamps();
         });

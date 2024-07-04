@@ -11,7 +11,7 @@ class CustomerAuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.customer-login');
+        return view('auth.login');
     }
 
     public function login(Request $request)
