@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::view('/catalogo','/cliente/catalogo');
+    
 });
 
 Route::prefix('customer')->group(function () {
@@ -48,6 +50,8 @@ Route::middleware(['auth:client'])->group(function () {
     Route::get('/client/profile', [ProfileController::class, 'edit'])->name('client.profile.edit');
     Route::patch('/client/profile', [ProfileController::class, 'update'])->name('client.profile.update');
     Route::delete('/client/profile', [ProfileController::class, 'destroy'])->name('client.profile.destroy');
+
+    
 });
 
 Route::prefix('admin')->group(function () {
@@ -64,18 +68,17 @@ Route::prefix('admin')->group(function () {
 
 Route::view('/homepage','/cliente/her_home');
 Route::view('/nosotros','/cliente/her_nosotros');
-Route::view('/catalogo','/cliente/catalogo');
 Route::view('/detalle','/cliente/detalle');
 Route::view('/contacto','/cliente/contacto');
-
 Route::get('/catalogo', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'catalogo'])->name('catalogo');
+
 Route::get('/detalle/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'detalle'])->name('detalle');
 Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'filtro_categoria'])->name('catalogo.categoria');
 Route::resource('/order_details', OrderDetailController::class);
 Route::resource('/orders', OrderController::class);
 Route::post('/crear_pedido', [OrderController::class, 'crearPedido'])->name('carrito.crear');
 
-Route::get('/cliente/ordenescliente', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenes');
+Route::get('/cliente/ordenescliente/{product_id}', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenes');
 
 
 Route::group(['middleware' => ['auth']], function () {

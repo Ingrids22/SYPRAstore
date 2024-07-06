@@ -64,7 +64,7 @@
             <tr>
                 <td colspan="5" class="text-right">
                     <a href="{{ url('/catalogo') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a>
-                    <a href="{{ route('cliente.ordenes') }}" class="btn btn-secondary"> To Watch Orders <i class="fa fa-angle-right"></i></a>
+{{--                     <a href="{{ route('cliente.ordenes', ['id' => $id]) }}" class="btn btn-secondary"> To Watch Orders <i class="fa fa-angle-right"></i></a> --}}
                     <button type="submit" class="btn btn-success">Checkout</button>
                 </td>
             </tr>

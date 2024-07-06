@@ -75,15 +75,15 @@ class OrderController extends Controller
         return redirect()->route('orders.index');
     }
 
-    public function verOrdenes()
+    public function verOrdenes($id)
 {
     $user = Auth::user(); // Obtener el usuario autenticado
     $customer_id = $user->id; // Obtener el ID del cliente desde el usuario autenticado
 
     // Obtener todas las órdenes del cliente actual
     $orders = Order::where('customer_id', $customer_id)->get();
-
-    return view('cliente.ordenescliente', compact('orders'));
+    $producto = $id;
+    return view('cliente.ordenescliente', compact('orders'), compact('producto') );
 }
 
     public function crearPedido(Request $request)
