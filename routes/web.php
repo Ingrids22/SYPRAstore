@@ -8,6 +8,8 @@ use App\Http\Controllers\Adminauth\AdminAuthController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
+use App\Http\Controllers\PaymentController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -70,6 +72,7 @@ Route::view('/homepage','/cliente/her_home');
 Route::view('/nosotros','/cliente/her_nosotros');
 Route::view('/detalle','/cliente/detalle');
 Route::view('/contacto','/cliente/contacto');
+Route::view('/payment','cliente.payment');
 Route::get('/catalogo', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'catalogo'])->name('catalogo');
 
 Route::get('/detalle/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'detalle'])->name('detalle');
@@ -77,6 +80,8 @@ Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalo
 Route::resource('/order_details', OrderDetailController::class);
 Route::resource('/orders', OrderController::class);
 Route::post('/crear_pedido', [OrderController::class, 'crearPedido'])->name('carrito.crear');
+Route::post('/payment/{order}', [OrderController::class, 'paymentView'])->name('payment.view');
+
 
 Route::get('/cliente/ordenescliente/{product_id}', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenes');
 
@@ -93,7 +98,9 @@ Route::get('/pagar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoCont
 Route::get('/producto', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'products'])->name('products');
 Route::get('/proceso_pedido', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'procesoPedido'])->name('carrito.procesopedido');
 
-
+Route::post('/pay', [PaymentController::class, 'pay'])->name('payment');
+Route::get('/success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/error', [PaymentController::class, 'error'])->name('payment.error');
 
 });
 });
