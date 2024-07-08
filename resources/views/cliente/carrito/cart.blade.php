@@ -33,8 +33,7 @@
                     <td data-th="Product">
                         <div class="row">
                             <div class="col-sm-3 hidden-xs">
-                                <img src="{{ asset('storage/' . $details['image']) }}" width="250
-                                " class="img-responsive"/>
+                                <img src="{{ asset('storage/' . $details['image']) }}" width="250" class="img-responsive"/>
                             </div>
                         </div>
                     </td>
@@ -45,14 +44,14 @@
                     </td>
                     <td data-th="Price">${{ $details['price'] }}</td>
                     <td data-th="Quantity">
-                        <input type="number" name="quantity" value="{{ $details['quantity'] }}" class="form-control quantity update-cart" />
-                        <input type="hidden" name="price" value="{{ $details['price'] }}" />
+                        <input type="number" name="productos[{{ $loop->index }}][quantity]" value="{{ $details['quantity'] }}" class="form-control quantity update-cart" />
+                        <input type="hidden" name="productos[{{ $loop->index }}][price]" value="{{ $details['price'] }}" />
                     </td>
                     <td data-th="Subtotal" class="text-center">${{ $details['price'] * $details['quantity'] }}</td>
                     <td class="actions" data-th="">
                         <button class="btn btn-danger btn-sm remove-from-cart"><i class="fa fa-trash-o"></i></button>
                     </td>
-                    <input type="hidden" name="producto" value="{{ $id }}" />
+                    <input type="hidden" name="productos[{{ $loop->index }}][id]" value="{{ $id }}" />
                 </tr>
             @endforeach
         @endif
@@ -61,13 +60,12 @@
         <tr>
             <td colspan="5" class="text-right"><h3><strong>Total ${{ $total }}</strong></h3></td>
         </tr>
-            <tr>
-                <td colspan="5" class="text-right">
-                    <a href="{{ url('/catalogo') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a>
-{{--                     <a href="{{ route('cliente.ordenes', ['id' => $id]) }}" class="btn btn-secondary"> To Watch Orders <i class="fa fa-angle-right"></i></a> --}}
-                    <button type="submit" class="btn btn-success">Checkout</button>
-                </td>
-            </tr>
+        <tr>
+            <td colspan="5" class="text-right">
+                <a href="{{ url('/catalogo') }}" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a>
+                <button type="submit" class="btn btn-success">Checkout</button>
+            </td>
+        </tr>
         </form>
     </tfoot>
 </table>
@@ -99,7 +97,6 @@
         }
     });
 });
-
 
     $(".remove-from-cart").click(function (e) {
         e.preventDefault();

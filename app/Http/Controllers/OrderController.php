@@ -74,59 +74,71 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index');
     }
-
-    public function verOrdenes($id)
-{
-    $user = Auth::user(); // Obtener el usuario autenticado
-    $customer_id = $user->id; // Obtener el ID del cliente desde el usuario autenticado
-
-    // Obtener todas las órdenes del cliente actual
-    $orders = Order::where('customer_id', $customer_id)->get();
-    $producto = $id;
-    return view('cliente.ordenescliente', compact('orders'), compact('producto') );
-}
-
-    public function crearPedido(Request $request)
+    public function verOrdenes()
     {
         $user = Auth::user(); // Obtener el usuario autenticado
-        $customer_id = $user->id;
+        $customer_id = $user->id; // Obtener el ID del cliente desde el usuario autenticado
+    
+        // Obtener todas las órdenes del cliente actual, con los detalles de los productos y el nombre del cliente
+        $orders = Order::where('customer_id', $customer_id)
+            ->with(['orderDetails.product', 'customer'])
+            ->get();
+    
+        return view('cliente.ordenescliente', compact('orders'));
+    }
+    
+    
+    public function crearPedido(Request $request)
+{
+    $user = Auth::user(); // Obtener el usuario autenticado
+    $customer_id = $user->id;
 
-        $quantity = $request->input('quantity');
-        $price = $request->input('price');
-        $producto = $request->input('producto');
+    // Obtener los productos del request
+    $productos = $request->input('productos', []);
 
-            $order = new Order();
-            $order->customer_id = $customer_id;
-            $order->total = $quantity;
-            $order->fecha_orden = now();
-            $order->status = 'activo';
-            $order->save();
+    // Validar que productos no esté vacío
+    if (empty($productos)) {
+        return response()->json(['message' => 'No hay productos en el pedido'], 400);
+    }
 
-            // $details = session('cart')[$id];
-            // dd($producto);
+    DB::beginTransaction(); // Inicia una transacción
 
+    try {
+        $order = new Order();
+        $order->customer_id = $customer_id;
+        $order->total = array_sum(array_map(function($producto) {
+            return $producto['quantity'] * $producto['price'];
+        }, $productos));
+        $order->fecha_orden = now();
+        $order->status = 'activo';
+        $order->save();
+
+        foreach ($productos as $producto) {
             $orderDetail = new OrderDetail();
-            $orderDetail->order_id = $customer_id;
-            $orderDetail->product_id = $producto;
-            $orderDetail->quantity = $quantity;
-            $orderDetail->price = $price;
+            $orderDetail->order_id = $order->id; // Usa el ID de la orden recién creada
+            $orderDetail->product_id = $producto['id'];
+            $orderDetail->quantity = $producto['quantity'];
+            $orderDetail->price = $producto['price'];
             $orderDetail->save();
 
-            $product = Product::find($producto);
+            $product = Product::find($producto['id']);
             if ($product) {
-                $product->existence -= $quantity;
+                $product->existence -= $producto['quantity'];
                 $product->save();
             }
+        }
 
-            $orders = Order::where('customer_id', $customer_id)->get();
+        DB::commit(); // Confirma la transacción
 
-            return view('/cliente/ordenescliente', compact('orders'), compact('producto'));
+        $orders = Order::where('customer_id', $customer_id)->get();
 
+        return view('cliente.ordenescliente', compact('orders'));
 
-            // return response()->json(['message' => 'Pedido creado exitosamente', 'order_id' => $order->id]);
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     return response()->json(['message' => 'Error al crear el pedido: ' . $e->getMessage()], 500);
-        // }
+    } catch (\Exception $e) {
+        DB::rollBack(); // Revierte la transacción en caso de error
+        return response()->json(['message' => 'Error al crear el pedido: ' . $e->getMessage()], 500);
     }
+}
+
+    
 }

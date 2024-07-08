@@ -15,8 +15,8 @@
                       <thead>
                           <tr>
                               <th>ID</th>
-                              <th>ID del cliente</th>
-                              <th>ID del producto</th>
+                              <th>Cliente</th>
+                              <th>Productos</th>
                               <th>Fecha de Orden</th>
                               <th>Total</th>
                               <th>Estado</th>
@@ -27,8 +27,16 @@
                           @foreach ($orders as $order)
                           <tr>
                               <td>{{ $order->id }}</td>
-                              <td>{{ $order->customer_id }}</td>
-                              <td>{{ $producto }}</td>
+                              <td>{{ $order->customer->name }} {{ $order->customer->last_name }}</td>
+                              <td>
+                                  @foreach ($order->orderDetails as $detail)
+                                      {{ $detail->product->name }} 
+                                      <br>
+                                      - Cantidad: {{ $detail->quantity }} 
+                                      <br>
+                                      - Precio: {{ $detail->price }}<br>
+                                  @endforeach
+                              </td>
                               <td>{{ $order->fecha_orden }}</td>
                               <td>{{ $order->total }}</td>
                               <td>{{ $order->status }}</td>
@@ -45,6 +53,5 @@
       </div>
   </div>
 </div>
-
 
 @endsection

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\cliente;
 
 use App\Http\Controllers\Controller;
-// use DB;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
@@ -99,7 +98,7 @@ class ProductoCatalogoController extends Controller
     }
 
     public function procesopedido(Request $request){
-        if (ProductoCatalogoController::getContent()->count() > 0) {
+        if (session()->has('cart') && count(session('cart')) > 0) {
             // procesamiento
         } else {
             // redirect
