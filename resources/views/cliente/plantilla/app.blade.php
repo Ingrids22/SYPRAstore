@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/stylespregfrec.css">
     <link rel="stylesheet" href="css/ordenes.css">  
+    <link rel="stylesheet" href="css/payment.css">  
 
     <link href="{{ asset('css/stylecarrito.css') }}" rel="stylesheet">
     <link href="{{ asset('css/stylefooter.css') }}" rel="stylesheet">

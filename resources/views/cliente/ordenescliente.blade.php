@@ -41,7 +41,7 @@
                               <td>{{ $order->total }}</td>
                               <td>{{ $order->status }}</td>
                               <td>
-                                  <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-primary">Ver Detalles</a>
+                                <a href="{{ url('/payment') }}" class="btn btn-sm btn-primary">Ver Detalles</a>
                                   <!-- Puedes agregar más acciones como editar o eliminar si es necesario -->
                               </td>
                           </tr>
