@@ -17,11 +17,14 @@ return new class extends Migration
             $table->id();
             $table->string('payment_id');
             $table->string('payer_id');
+            $table->unsignedBigInteger('order_id');
             $table->string('payer_email');
             $table->float('amount', 10, 2);
             $table->string('currency');
             $table->string('payment_status');
             $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade'); // Clave foránea definida al final
         });
     }
 

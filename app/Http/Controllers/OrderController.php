@@ -14,7 +14,7 @@ class OrderController extends Controller
     public function index()
     {
         // Obtener todas las órdenes del cliente autenticado
-        $orders = Order::where('id', auth()->id())->get();
+        $orders = Order::where('customer_id', auth()->id())->get();
 
         // Pasar las órdenes a la vista
         return view('cliente.ordenescliente', compact('orders'));
@@ -30,7 +30,7 @@ class OrderController extends Controller
         $validatedData = $request->validate([
             'id' => 'required|integer|exists:customers,id',
             'fecha_orden' => 'required|date',
-            'status' => 'required|string|in:activo,inactivo',
+            'status' => 'required|string|in:pending,paid',
         ]);
 
         $order = new Order();
@@ -57,7 +57,7 @@ class OrderController extends Controller
         $validatedData = $request->validate([
             'id' => 'required|integer|exists:customers,id',
             'fecha_orden' => 'required|date',
-            'status' => 'required|string|in:activo,inactivo',
+            'status' => 'required|string|in:pending,paid',
         ]);
 
         $order = Order::find($id);
@@ -74,71 +74,69 @@ class OrderController extends Controller
 
         return redirect()->route('orders.index');
     }
+
     public function verOrdenes()
     {
         $user = Auth::user(); // Obtener el usuario autenticado
         $customer_id = $user->id; // Obtener el ID del cliente desde el usuario autenticado
     
-        // Obtener todas las órdenes del cliente actual, con los detalles de los productos y el nombre del cliente
+        // Obtener todas las órdenes del cliente actual
         $orders = Order::where('customer_id', $customer_id)
             ->with(['orderDetails.product', 'customer'])
             ->get();
     
         return view('cliente.ordenescliente', compact('orders'));
     }
-    
-    
+
     public function crearPedido(Request $request)
-{
-    $user = Auth::user(); // Obtener el usuario autenticado
-    $customer_id = $user->id;
+    {
+        $user = Auth::user(); // Obtener el usuario autenticado
+        $customer_id = $user->id;
 
-    // Obtener los productos del request
-    $productos = $request->input('productos', []);
+        // Obtener los productos del request
+        $productos = $request->input('productos', []);
 
-    // Validar que productos no esté vacío
-    if (empty($productos)) {
-        return response()->json(['message' => 'No hay productos en el pedido'], 400);
-    }
-
-    DB::beginTransaction(); // Inicia una transacción
-
-    try {
-        $order = new Order();
-        $order->customer_id = $customer_id;
-        $order->total = array_sum(array_map(function($producto) {
-            return $producto['quantity'] * $producto['price'];
-        }, $productos));
-        $order->fecha_orden = now();
-        $order->status = 'activo';
-        $order->save();
-
-        foreach ($productos as $producto) {
-            $orderDetail = new OrderDetail();
-            $orderDetail->order_id = $order->id; // Usa el ID de la orden recién creada
-            $orderDetail->product_id = $producto['id'];
-            $orderDetail->quantity = $producto['quantity'];
-            $orderDetail->price = $producto['price'];
-            $orderDetail->save();
-
-            $product = Product::find($producto['id']);
-            if ($product) {
-                $product->existence -= $producto['quantity'];
-                $product->save();
-            }
+        // Validar que productos no esté vacío
+        if (empty($productos)) {
+            return response()->json(['message' => 'No hay productos en el pedido'], 400);
         }
 
-        DB::commit(); // Confirma la transacción
+        DB::beginTransaction(); // Inicia una transacción
 
-        $orders = Order::where('customer_id', $customer_id)->get();
+        try {
+            $order = new Order();
+            $order->customer_id = $customer_id;
+            $order->total = array_sum(array_map(function($producto) {
+                return $producto['quantity'] * $producto['price'];
+            }, $productos));
+            $order->fecha_orden = now();
+            $order->status = 'pending';
+            $order->save();
 
-        return view('cliente.ordenescliente', compact('orders'));
+            foreach ($productos as $producto) {
+                $orderDetail = new OrderDetail();
+                $orderDetail->order_id = $order->id; // Usa el ID de la orden recién creada
+                $orderDetail->product_id = $producto['id'];
+                $orderDetail->quantity = $producto['quantity'];
+                $orderDetail->price = $producto['price'];
+                $orderDetail->save();
 
-    } catch (\Exception $e) {
-        DB::rollBack(); // Revierte la transacción en caso de error
-        return response()->json(['message' => 'Error al crear el pedido: ' . $e->getMessage()], 500);
+                $product = Product::find($producto['id']);
+                if ($product) {
+                    $product->existence -= $producto['quantity'];
+                    $product->save();
+                }
+            }
+
+            DB::commit(); // Confirma la transacción
+
+            $orders = Order::where('customer_id', $customer_id)->get();
+
+            return view('cliente.ordenescliente', compact('orders'));
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revierte la transacción en caso de error
+            return response()->json(['message' => 'Error al crear el pedido: ' . $e->getMessage()], 500);
+        }
     }
-}
-
-    
 }

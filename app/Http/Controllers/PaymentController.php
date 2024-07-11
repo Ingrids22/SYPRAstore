@@ -56,14 +56,11 @@ class PaymentController extends Controller
 
             if ($response->isSuccessful()) {
                 $arr = $response->getData();
-
                 $payment = new Payment();
-                $payment->payment_id = $arr['id'];
                 $payment->payer_id = $arr['payer']['payer_info']['payer_id'];
                 $payment->payer_email = $arr['payer']['payer_info']['email'];
                 $payment->amount = $arr['transactions'][0]['amount']['total'];
                 $payment->currency = env('PAYPAL_CURRENCY');
-                $payment->payment_status = $arr['state'];
 
                 $payment->save();
 

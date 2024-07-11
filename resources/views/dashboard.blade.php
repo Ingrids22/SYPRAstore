@@ -13,11 +13,11 @@
                 </div>
             </div>
             <div class="mt-4">
-                <a href="{{ url('/catalogo') }}">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded">
-                        Ir al Catálogo
+                <form action="{{ route('cliente.ordenes') }}" method="GET">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">
+                        Ver Órdenes
                     </button>
-                </a>
+                </form>
             </div>
         </div>
     </div>

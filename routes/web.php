@@ -72,7 +72,7 @@ Route::view('/homepage','/cliente/her_home');
 Route::view('/nosotros','/cliente/her_nosotros');
 Route::view('/detalle','/cliente/detalle');
 Route::view('/contacto','/cliente/contacto');
-Route::view('/payment','cliente.payment');
+Route::view('/payment', 'cliente.payment')->name('cliente.payment.view');
 Route::get('/catalogo', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'catalogo'])->name('catalogo');
 
 Route::get('/detalle/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'detalle'])->name('detalle');
@@ -80,10 +80,8 @@ Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalo
 Route::resource('/order_details', OrderDetailController::class);
 Route::resource('/orders', OrderController::class);
 Route::post('/crear_pedido', [OrderController::class, 'crearPedido'])->name('carrito.crear');
-Route::post('/payment/{order}', [OrderController::class, 'paymentView'])->name('payment.view');
 
-
-Route::get('/cliente/ordenescliente/{product_id}', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenes');
+Route::get('/cliente/ordenescliente', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenes');
 
 
 Route::group(['middleware' => ['auth']], function () {
