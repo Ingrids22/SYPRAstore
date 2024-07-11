@@ -39,9 +39,16 @@
                               </td>
                               <td>{{ $order->fecha_orden }}</td>
                               <td>{{ $order->total }}</td>
-                              <td>{{ $order->status }}</td>
+                              @if ($order->status === 'pending')
                               <td>
-                                <a href="{{ url('/payment') }}" class="btn btn-sm btn-primary">Ver Detalles</a>
+                                Pago pendiente
+                                <a href="{{ route('cliente.payment.view', $order->id) }}">Pagar ahora</a>
+                              </td>
+                              @else
+                              <td>{{ $order->status }}</td>
+                              @endif        
+                              <td>
+                                <a class="btn btn-sm btn-primary">Ver Detalles</a>
                                   <!-- Puedes agregar más acciones como editar o eliminar si es necesario -->
                               </td>
                           </tr>

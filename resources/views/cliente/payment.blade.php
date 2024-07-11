@@ -8,7 +8,7 @@
 	<div class="top-nav">
 		<ul>
 			<li class="highlighted">Payment</li>
-			<form action="{{ route('payment') }}" method="">
+			<form action="{{ route('payment') }}" method="POST">
 				@csrf
 				<input type="hidden" name="amount" value="200"> <!-- Asegúrate de poner el valor correcto de amount -->
 				<button style="background-color: #0070BA; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; padding: 7px 20px; border: none; border-radius: 5px; cursor: pointer;" type="submit">Pagar con PayPal</button>

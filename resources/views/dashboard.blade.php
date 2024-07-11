@@ -12,6 +12,13 @@
                     {{ __("You're logged in!") }}
                 </div>
             </div>
+            <div class="mt-4">
+                <form action="{{ route('cliente.ordenes') }}" method="GET">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">
+                        Ver Órdenes
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </x-app-layout>
