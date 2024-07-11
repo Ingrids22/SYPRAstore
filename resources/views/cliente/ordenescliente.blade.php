@@ -30,11 +30,13 @@
                               <td>{{ $order->customer->name }} {{ $order->customer->last_name }}</td>
                               <td>
                                   @foreach ($order->orderDetails as $detail)
+                                  <br>
                                       {{ $detail->product->name }} 
                                       <br>
                                       - Cantidad: {{ $detail->quantity }} 
                                       <br>
-                                      - Precio: {{ $detail->price }}<br>
+                                      - Precio: {{ $detail->price }}
+                                      <br>
                                   @endforeach
                               </td>
                               <td>{{ $order->fecha_orden }}</td>
