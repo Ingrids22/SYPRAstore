@@ -35,6 +35,33 @@
                     </div>
                 @endif
 
+                <div class="mt-4">
+                    <h4>Detalles de Envío</h4>
+                    @if($order->shipper)
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <strong>Tracking Number:</strong> {{ $order->shipper->tracking_number }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Phone:</strong> {{ $order->shipper->phone }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Parcel:</strong> {{ $order->shipper->parcel }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Shipping Date:</strong> {{ $order->shipper->shipping_date }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Arrival Date:</strong> {{ $order->shipper->arrival_date }}
+                            </li>
+                            <li class="list-group-item">
+                                <img src="{{ asset('storage/' . $order->shipper->image) }}" width="100" class="img-responsive"/>
+                            </li>
+                        </ul>
+                    @else
+                        <p>No disponible</p>
+                    @endif
+                </div>
                 <a href="{{ route('cliente.ordenescliente') }}" class="btn btn-sm btn-primary mt-4">Volver a órdenes</a>
             </div>
         </div>

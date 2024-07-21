@@ -45,15 +45,17 @@
                       </td>
                       <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</td>
                       <td>${{ number_format($order->total, 2, '.', ',') }} MXN</td>
-                      @if ($order->status === 'en_proceso')
                       <td>
-                        Pago pendiente
-                        <br>
-                        <a href="{{ route('metodo_pago', ['orderId' => $order->id]) }}" class="btn btn-sm btn-success">Ir a método de pago</a>
+                        @if ($order->status === 'en_proceso')
+                            Pago pendiente
+                            <br>
+                            <a href="{{ route('metodo_pago', ['orderId' => $order->id]) }}" class="btn btn-sm btn-success">Ir a método de pago</a>
+                        @elseif ($order->status === 'ENVIADO')
+                            Enviado
+                        @else
+                            {{ $order->status }}
+                        @endif
                       </td>
-                      @else
-                      <td>{{ $order->status }}</td>
-                      @endif        
                       <td>
                         @if($order->shipper)
                             <strong>Tracking Number:</strong> {{ $order->shipper->tracking_number }} <br>

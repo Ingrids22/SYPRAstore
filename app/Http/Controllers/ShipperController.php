@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shipper;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,21 +31,29 @@ class ShipperController extends Controller
             'arrival_date' => 'required|date',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         $shipper = new Shipper();
         $shipper->fill($validatedData);
-
+    
         if ($request->hasFile('image')) {
             $extension = $request->image->extension();
             $imageName = 'shipper_' . time() . '.' . $extension;
             $path = $request->image->storeAs('images', $imageName, 'public');
             $shipper->image = $path;
         }
-
+    
         $shipper->save();
-
+    
+        // Actualizar el estado de la orden a "ENVIADO"
+        $order = Order::find($validatedData['order_id']);
+        if ($order) {
+            $order->status = 'ENVIADO';
+            $order->save();
+        }
+    
         return redirect()->route('shippers.index');
     }
+    
 
     public function show($id) // GET
     {

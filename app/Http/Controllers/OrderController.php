@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    public function __construct()
+{
+    $this->middleware('auth');
+}
+
     public function showPaymentMethod($orderId)
     {
         $order = Order::find($orderId);
@@ -22,12 +27,16 @@ class OrderController extends Controller
         
         return view('cliente.payment', compact('order'));
     }
-    public function index()
+    public function index() // Método para mostrar los pedidos
     {
-        // Obtener todas las órdenes del cliente autenticado
-        $orders = Order::where('customer_id', auth()->id())->get();
-
-        // Pasar las órdenes a la vista
+        // Verifica si el usuario está autenticado
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para ver tus pedidos.');
+        }
+        
+        $user = Auth::user();
+        $orders = $user->orders; // Suponiendo que la relación entre usuario y pedidos se llama 'orders'
+        
         return view('cliente.ordenescliente', compact('orders'));
     }
 
@@ -98,16 +107,29 @@ class OrderController extends Controller
 
     public function verOrdenes()
     {
-        $user = Auth::user(); // Obtener el usuario autenticado
-        $customer_id = $user->id; // Obtener el ID del cliente desde el usuario autenticado
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error');
+        }
     
-        // Obtener todas las órdenes del cliente actual
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Usuario no encontrado.');
+        }
+    
+        $customer_id = $user->id;
+    
         $orders = Order::where('customer_id', $customer_id)
             ->with(['orderDetails.product', 'customer', 'shipper'])
             ->get();
     
+        if ($orders->isEmpty()) {
+            return view('cliente.ordenescliente')->with('message', 'No tienes órdenes.');
+        }
+    
         return view('cliente.ordenescliente', compact('orders'));
     }
+    
+    
     
 
     public function crearPedido(Request $request)
