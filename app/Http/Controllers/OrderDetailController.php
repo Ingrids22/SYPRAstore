@@ -32,8 +32,8 @@ class OrderDetailController extends Controller
         $validatedData = $request->validate([
             'order_id' => 'required|integer|exists:orders,id',
             'product_id' => 'required|integer|exists:products,id',
-            'cantidad' => 'required|integer|min:1',
-            'precio' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
         ]);
 
         OrderDetail::create($validatedData);
@@ -52,8 +52,8 @@ class OrderDetailController extends Controller
         $validatedData = $request->validate([
             'order_id' => 'required|integer|exists:orders,id',
             'product_id' => 'required|integer|exists:products,id',
-            'cantidad' => 'required|integer|min:1',
-            'precio' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
         ]);
 
         $orderDetail = OrderDetail::find($id);

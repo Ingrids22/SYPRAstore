@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
+    public function showPaymentMethod($orderId)
+    {
+        $order = Order::find($orderId);
+        
+        if (!$order) {
+            // Manejo de error si el pedido no se encuentra
+            return redirect()->back()->with('error', 'Order not found.');
+        }
+        
+        return view('cliente.payment', compact('order'));
+    }
     public function index()
     {
         // Obtener todas las órdenes del cliente autenticado
@@ -29,8 +40,8 @@ class OrderController extends Controller
     {
         $validatedData = $request->validate([
             'id' => 'required|integer|exists:customers,id',
-            'fecha_orden' => 'required|date',
-            'status' => 'required|string|in:pending,paid',
+            'order_date' => 'required|date',
+            'status' => 'required|string|in:en_proceso,PAGADO',
         ]);
 
         $order = new Order();
@@ -42,22 +53,28 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::find($id);
-        return view('admin.orders.mostrar')->with('order', $order);
+        $order = Order::with('payment', 'customer')->find($id);
+    
+        if (!$order) {
+            abort(404, 'Order not found');
+        }
+    
+        return view('cliente.order_detail', ['order' => $order]);
     }
+    
 
     public function edit($id)
     {
         $order = Order::find($id);
-        return view('admin.orders.edit')->with('order', $order);
+        return view('admin.orders.edit', compact('order'));
     }
 
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
             'id' => 'required|integer|exists:customers,id',
-            'fecha_orden' => 'required|date',
-            'status' => 'required|string|in:pending,paid',
+            'order_date' => 'required|date',
+            'status' => 'required|string|in:en_proceso,PAGADO',
         ]);
 
         $order = Order::find($id);
@@ -90,53 +107,56 @@ class OrderController extends Controller
 
     public function crearPedido(Request $request)
     {
-        $user = Auth::user(); // Obtener el usuario autenticado
+        $user = Auth::user();
         $customer_id = $user->id;
-
+    
         // Obtener los productos del request
         $productos = $request->input('productos', []);
-
+    
         // Validar que productos no esté vacío
         if (empty($productos)) {
-            return response()->json(['message' => 'No hay productos en el pedido'], 400);
+            return redirect()->back()->with('error', 'No hay productos en el pedido');
         }
-
-        DB::beginTransaction(); // Inicia una transacción
-
+    
+        DB::beginTransaction();
+    
         try {
             $order = new Order();
             $order->customer_id = $customer_id;
             $order->total = array_sum(array_map(function($producto) {
                 return $producto['quantity'] * $producto['price'];
             }, $productos));
-            $order->fecha_orden = now();
-            $order->status = 'pending';
+            $order->order_date = now();
+            $order->status = 'en_proceso';
             $order->save();
-
+    
             foreach ($productos as $producto) {
                 $orderDetail = new OrderDetail();
-                $orderDetail->order_id = $order->id; // Usa el ID de la orden recién creada
+                $orderDetail->order_id = $order->id;
                 $orderDetail->product_id = $producto['id'];
                 $orderDetail->quantity = $producto['quantity'];
                 $orderDetail->price = $producto['price'];
                 $orderDetail->save();
-
+    
                 $product = Product::find($producto['id']);
                 if ($product) {
                     $product->existence -= $producto['quantity'];
                     $product->save();
                 }
             }
-
-            DB::commit(); // Confirma la transacción
-
-            $orders = Order::where('customer_id', $customer_id)->get();
-
-            return view('cliente.ordenescliente', compact('orders'));
-
+    
+            // Eliminar productos del carrito en la sesión
+            $request->session()->forget('cart');
+    
+            DB::commit();
+    
+            return redirect()->route('orders.index')->with('success', 'Pedido creado exitosamente.');
         } catch (\Exception $e) {
-            DB::rollBack(); // Revierte la transacción en caso de error
-            return response()->json(['message' => 'Error al crear el pedido: ' . $e->getMessage()], 500);
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Error al crear el pedido: ' . $e->getMessage());
         }
     }
+    
+    
+    
 }

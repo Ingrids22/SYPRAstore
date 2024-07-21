@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductController;
 
 
 Route::get('/', function () {
@@ -78,14 +79,20 @@ Route::get('/catalogo', [\App\Http\Controllers\cliente\ProductoCatalogoControlle
 Route::get('/detalle/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'detalle'])->name('detalle');
 Route::post('/catalogo/categoria', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'filtro_categoria'])->name('catalogo.categoria');
 Route::resource('/order_details', OrderDetailController::class);
+Route::get('/cliente/ordenes', [OrderController::class, 'index'])->name('cliente.ordenes');
 Route::resource('/orders', OrderController::class);
 Route::post('/crear_pedido', [OrderController::class, 'crearPedido'])->name('carrito.crear');
 
-Route::get('/cliente/ordenescliente', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenes');
+Route::get('/cliente/ordenescliente', [\App\Http\Controllers\OrderController::class, 'verOrdenes'])->name('cliente.ordenescliente');
 
+Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 
 Route::group(['middleware' => ['auth']], function () {
 Route::group(['middleware' => ['role:customer']], function () {
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/ordenes', [OrderController::class, 'index'])->name('cliente.ordenes1');
+        // Otras rutas protegidas por el middleware de autenticación
+    });
 
 Route::get('/agregar_carrito/{id}', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'agregarCarrito'])->name('carrito.agregar');
 Route::post('/actualizar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'actualizarCarrito'])->name('carrito.actualizar');
@@ -96,9 +103,19 @@ Route::get('/pagar_carrito', [\App\Http\Controllers\cliente\ProductoCatalogoCont
 Route::get('/producto', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'products'])->name('products');
 Route::get('/proceso_pedido', [\App\Http\Controllers\cliente\ProductoCatalogoController::class, 'procesoPedido'])->name('carrito.procesopedido');
 
+// Paypal
+Route::get('/metodo-de-pago/{orderId}', [OrderController::class, 'showPaymentMethod'])->name('metodo_pago');
 Route::post('/pay', [PaymentController::class, 'pay'])->name('payment');
 Route::get('/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/error', [PaymentController::class, 'error'])->name('payment.error');
+Route::get('/payment-success/{order_id}', [PaymentController::class, 'success'])->name('payment.success');
+
+// Rutas para catálogo y búsqueda
+Route::get('/catalogo', [ProductController::class, 'index'])->name('catalogo');
+Route::get('/catalogo/buscar', [ProductController::class, 'index'])->name('catalogo.buscar');
+
+Route::view('/modal', 'cliente/carrito/modal');
+
 
 });
 });

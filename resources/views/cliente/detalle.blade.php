@@ -48,7 +48,7 @@
             </div>
             <div class="lc-block mb-5">
                 <div editable="rich">
-                    <p>{{ $product->description }} MXN</p>
+                    <p>{{ $product->description }}</p>
                 </div>
             </div>
             <div class="lc-block d-sm-flex align-items-center mb-4 overflow-hidden position-relative">

@@ -11,19 +11,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/stylespregfrec.css">
-    <link rel="stylesheet" href="css/ordenes.css">  
-    <link rel="stylesheet" href="css/payment.css">  
-
+    <link rel="stylesheet" href="{{ asset('css/stylespregfrec.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/ordenes.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/payment.css') }}">
     <link href="{{ asset('css/stylecarrito.css') }}" rel="stylesheet">
     <link href="{{ asset('css/stylefooter.css') }}" rel="stylesheet">
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/favicon.ico') }}" />
     <!-- Bootstrap icons-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="/assets/css/styles.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="/pruebas_css/operaciones2.css">
+    <link href="{{ asset('assets/css/styles.css') }}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ asset('pruebas_css/operaciones2.css') }}">
 </head>
 <style>
     .navbar-logo {
@@ -113,7 +112,9 @@
                             </div>
                         </div>
                     </div>
-                      
+                    <div class="d-flex align-items-center">
+                        <a href="{{ route('cliente.ordenescliente') }}" class="btn btn-secondary mx-2">Ver mis pedidos</a>
+                    </div>
                     <br/>
                     <div class="container">
                       
@@ -126,12 +127,11 @@
                     </div>
                 </div>
             </div>
-                        <br/>
-                        <div class="d-flex">
-                            <a href="{{ url('/login') }}" class="btn btn-primary btn-circle">
-                                <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto de Usuario" class="img-fluid rounded-circle" width="30" height="30">
-                            </a>
-                        </div>
+            <div class="d-flex align-items-center">
+                <a href="{{ url('/login') }}" class="btn btn-primary btn-circle">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Foto de Usuario" class="img-fluid rounded-circle" width="30" height="30">
+                </a>
+            </div>
                     </form>
         </nav>
         @yield('contenido')
@@ -140,7 +140,6 @@
         <footer class="footer-section">
             <div class="container">
                 <div class="footer-cta pt-5 pb-5">
-                   
                 </div>
                 <div class="footer-content pt-5 pb-5">
                     <div class="row">

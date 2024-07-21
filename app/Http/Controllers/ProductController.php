@@ -4,19 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Image;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-public function index(Request $request)
-{
-    $status = $request->get('status', 'activo'); // Valor por defecto 'activo'
-    $products = Product::where('status', $status)->get();
-    return view('admin.products.data')->with('products', $products);
-}
+    public function index(Request $request)
+    {
+        $query = Product::with('category'); // Incluir la relación de categorías
 
+        if ($request->has('nombre')) {
+            $query->where('name', 'like', '%' . $request->input('nombre') . '%');
+        }
+
+        if ($request->has('categories') && $request->input('categories') != '') {
+            $query->where('category_id', $request->input('categories'));
+        }
+
+        $products = $query->get();
+        $categories = Category::all(); // Obtener todas las categorías
+
+        return view('cliente.catalogo', ['productos' => $products, 'categories' => $categories]);
+    }
 
     public function create() // GET
     {
@@ -63,8 +74,8 @@ public function index(Request $request)
         $product = Product::with('images')->findOrFail($id);
         return view('admin.products.mostrar')->with('product', $product);
     }
-    
-    
+
+
     public function edit($id) // GET
     {
         $product = Product::find($id);
@@ -128,4 +139,15 @@ public function index(Request $request)
 
         return redirect()->route('products.index');
     }
+
+    public function search(Request $request)
+{
+    $query = $request->input('nombre');
+    
+    // Buscar productos por nombre
+    $productos = Product::where('name', 'like', "%{$query}%")->get();
+
+    return view('cliente.catalogo', compact('productos'));
+}
+
 }

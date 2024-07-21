@@ -3,17 +3,21 @@
 @section('Titulo','Método de Pago')
 
 @section('contenido')
-
+<head>
+	<link rel="stylesheet" href="css/payment.css"> 
+</head>
 <div class="payment-container created-by-anniedotexe">
 	<div class="top-nav">
 		<ul>
-			<li class="highlighted">Payment</li>
-			<form action="{{ route('payment') }}" method="POST">
-				@csrf
-				<input type="hidden" name="amount" value="200"> <!-- Asegúrate de poner el valor correcto de amount -->
-				<button style="background-color: #0070BA; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; padding: 7px 20px; border: none; border-radius: 5px; cursor: pointer;" type="submit">Pagar con PayPal</button>
-			</form>
 			
+			<li class="highlighted">Payment</li>
+            <form action="{{ route('payment') }}" method="POST">
+                @csrf
+                <input type="hidden" name="amount" value="{{ $order->total }}">
+                <input type="hidden" name="order_id" value="{{ $order->id }}">
+				<input type="hidden" name="currency" value="MXN">
+                <button style="background-color: #0070BA; color: white; font-family: 'Roboto', sans-serif; font-size: 16px; padding: 7px 20px; border: none; border-radius: 5px; cursor: pointer;" type="submit">Pagar con PayPal</button>
+            </form>
 		</ul>
 	</div>
 	<div class="main">
@@ -81,6 +85,5 @@
 			<button class="button" onclick="document.getElementById('payment-form').reset()">Place Your Order</button>
 		</div>
 	</div>
-</div>
 </div>
 @endsection

@@ -1,64 +1,70 @@
 @extends('cliente.plantilla.app')
 
-@section('Titulo', 'Ordenes')
+@section('Titulo', 'Mis Órdenes')
 
 @section('contenido')
 
-<div class="container">
-  <div class="row justify-content-center">
-      <div class="col-md-10">
-          <div class="card">
-              <div class="card-header">Mis Órdenes</div>
-
-              <div class="card-body">
-                  <table class="table">
-                      <thead>
-                          <tr>
-                              <th>ID</th>
-                              <th>Cliente</th>
-                              <th>Productos</th>
-                              <th>Fecha de Orden</th>
-                              <th>Total</th>
-                              <th>Estado</th>
-                              <th>Acciones</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          @foreach ($orders as $order)
-                          <tr>
-                              <td>{{ $order->id }}</td>
-                              <td>{{ $order->customer->name }} {{ $order->customer->last_name }}</td>
-                              <td>
-                                  @foreach ($order->orderDetails as $detail)
-                                  <br>
-                                      {{ $detail->product->name }} 
-                                      <br>
-                                      - Cantidad: {{ $detail->quantity }} 
-                                      <br>
-                                      - Precio: {{ $detail->price }}
-                                      <br>
-                                  @endforeach
-                              </td>
-                              <td>{{ $order->fecha_orden }}</td>
-                              <td>{{ $order->total }}</td>
-                              @if ($order->status === 'pending')
-                              <td>
-                                Pago pendiente
-                                <a href="{{ route('cliente.payment.view', $order->id) }}">Pagar ahora</a>
-                              </td>
-                              @else
-                              <td>{{ $order->status }}</td>
-                              @endif        
-                              <td>
-                                <a class="btn btn-sm btn-primary">Ver Detalles</a>
-                                  <!-- Puedes agregar más acciones como editar o eliminar si es necesario -->
-                              </td>
-                          </tr>
+<div class="container mt-4">
+  @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+  @endif
+  <div class="card">
+      <div class="card-header bg-secondary text-white">
+          Mis Órdenes
+      </div>
+      <div class="card-body">
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>Cliente</th>
+                      <th>Productos</th>
+                      <th>Fecha de Orden</th>
+                      <th>Total</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  @forelse ($orders as $order)
+                  <tr>
+                      <td>{{ $order->id }}</td>
+                      <td>{{ $order->customer->name }} {{ $order->customer->last_name }}</td>
+                      <td>
+                          @foreach ($order->orderDetails as $detail)
+                          <div>
+                            {{ $detail->product->name }} <br>
+                            - <strong>Cantidad:</strong> {{ $detail->quantity }} <br>
+                            - <strong>Precio:</strong> ${{ number_format($detail->price, 2, '.', ',') }} MXN
+                        </div>
+                        
+                          <br>
                           @endforeach
-                      </tbody>
-                  </table>
-              </div>
-          </div>
+                      </td>
+                      <td>{{ \Carbon\Carbon::parse($order->order_date)->format('d/m/Y') }}</td>
+                      <td>${{ number_format($order->total, 2, '.', ',') }} MXN</td>
+                      @if ($order->status === 'en_proceso')
+                      <td>
+                        Pago pendiente
+                        <br>
+                        <a href="{{ route('metodo_pago', ['orderId' => $order->id]) }}" class="btn btn-sm btn-success">Ir a método de pago</a>
+                      </td>
+                      @else
+                      <td>{{ $order->status }}</td>
+                      @endif        
+                      <td>
+                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-primary">Ver detalles</a>
+                      </td>
+                  </tr>
+                  @empty
+                  <tr>
+                      <td colspan="7" class="text-center">No tienes órdenes.</td>
+                  </tr>
+                  @endforelse
+              </tbody>
+          </table>
       </div>
   </div>
 </div>

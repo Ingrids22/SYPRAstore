@@ -1,29 +1,40 @@
 @extends('cliente/plantilla/app')
 
-@section('Titulo','SYPRA')
+@section('Titulo', 'SYPRA')
 
 @section('contenido')
 <head>
 </head>
 
-<table id="cart" class="table table-hover table-condensed">
+<!-- Modal de error -->
+<!-- Modal de error -->
+@if(session('error'))
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{ session('error') }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
 
-    <thead>
-        <tr>
-            <th style="width:5%">Id</th>
-            <th style="width:20%">Producto</th>
-            <th style="width:20%">Name</th>
-            <th style="width:10%">Price</th>
-            <th style="width:8%">Quantity</th>
-            <th style="width:22%" class="text-center">Subtotal</th>
-            <th style="width:10%"></th>
-            <th style="width:10%"></th>
-        </tr>
-    </thead>
-    <tbody>
-        @php $total = 0 @endphp
-        <form action="{{ route('carrito.crear') }}" method="POST" style="display:inline;">
-            @csrf
+<table id="cart" class="table table-hover table-condensed">
+    <!-- Resto del contenido del carrito -->
+
+    @php $total = 0 @endphp
+    <form action="{{ route('carrito.crear') }}" method="POST" style="display:inline;">
+        @csrf
 
         @if(session('cart'))
             @foreach(session('cart') as $id => $details)
@@ -73,6 +84,11 @@
 
 @section('scripts')
 <script type="text/javascript">
+  $(document).ready(function(){
+    @if(session('error'))
+        $('#errorModal').modal('show');
+    @endif
+  });
 
   $(".update-cart").change(function (e) {
     e.preventDefault();
@@ -98,25 +114,25 @@
     });
 });
 
-    $(".remove-from-cart").click(function (e) {
-        e.preventDefault();
+  $(".remove-from-cart").click(function (e) {
+    e.preventDefault();
 
-        var ele = $(this);
+    var ele = $(this);
 
-        if(confirm("Are you sure want to remove?")) {
-            $.ajax({
-                url: '{{ route('carrito.quitar') }}',
-                method: "DELETE",
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    id: ele.parents("tr").attr("data-id")
-                },
-                success: function (response) {
-                    window.location.reload();
-                }
-            });
-        }
-    });
+    if(confirm("Are you sure want to remove?")) {
+        $.ajax({
+            url: '{{ route('carrito.quitar') }}',
+            method: "DELETE",
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: ele.parents("tr").attr("data-id")
+            },
+            success: function (response) {
+                window.location.reload();
+            }
+        });
+    }
+});
 
 </script>
 @endsection

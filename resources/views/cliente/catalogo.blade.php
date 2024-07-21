@@ -13,22 +13,45 @@
     </div>
 </header>
 
-<div class="col-md-5" id="div_botones">
-    <form action="/catalogo/categoria" method="POST">
-        @csrf
-        <div class="mb-1 d-flex justify-content-between">
-            <select class="form-select" id="filtroproducts" name="categories">
+<div class="container" id="div_botones">
+    <div class="d-flex flex-wrap">
+        <!-- Formulario de filtro por categoría -->
+        <form action="/catalogo" method="GET" class="d-flex align-items-center" id="category-filter-form">
+            @csrf
+            <select class="form-select me-2" id="filtroproducts" name="categories">
+                <option value="">Seleccionar categoría</option>
                 @foreach ($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                 @endforeach
             </select>
-            <input type="submit" value="Realizar consulta" name="enviar">
-            <input type="button" value="Ver todos los productos" name="enviar" onclick="window.location.href = '/catalogo';">
+        </form>
+        &nbsp;
+        <!-- Formulario de búsqueda por nombre -->
+        <form action="/catalogo" method="GET" class="d-flex align-items-center">
+            @csrf
+            <input type="text" name="nombre" placeholder="Buscar producto" class="form-control me-2">
+            <button type="submit" class="btn btn-outline-dark">Buscar</button>
+        </form>
+        &nbsp;
+        <!-- Botón para ver todos los productos -->
+        <form action="/catalogo" method="GET" class="d-flex align-items-center">
+            <button type="submit" class="btn btn-outline-dark">Ver todos los productos</button>
+        </form>
+        &nbsp;
+        {{-- <form action="{{ route('cliente.ordenes') }}" method="GET" class="d-flex align-items-center">
+            <button type="submit" class="btn btn-outline-dark">
+                Ver mis pedidos
+            </button>
+        </form> --}}
+    </div>
+    @if (session('status'))
+        <div class="alert alert-info mt-3">
+            {{ session('status') }}
         </div>
-    </form>
+    @endif
 </div>
 
-<section class="py-5">
+<section class="py-1">
     <div class="container px-2 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             @foreach ($productos as $product)
@@ -41,8 +64,8 @@
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <h5 class="fw-bolder">{{ $product->name }}</h5>
-                                <p>{{ $product->category_name }}</p>
-                                <p>${{ $product->price }}</p>
+                                <p>{{ $product->category->name ?? 'Sin categoría' }}</p>
+                                <p>${{ number_format($product->price, 2) }}</p>
                             </div>
                         </div>
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -57,5 +80,11 @@
         </div>
     </div>
 </section>
+
+<script>
+document.getElementById('filtroproducts').addEventListener('change', function() {
+    document.getElementById('category-filter-form').submit();
+});
+</script>
 
 @endsection
