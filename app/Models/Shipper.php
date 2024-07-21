@@ -10,7 +10,7 @@ class Shipper extends Model
     use HasFactory;
 
     protected $fillable = [
-        'order_id', 'tracking_number', 'phone', 'parcel', 'shipping_date', 'arrival_date'
+        'order_id', 'tracking_number', 'phone', 'parcel', 'shipping_date', 'arrival_date', 'image'
     ];
 
     public function order()
@@ -18,3 +18,4 @@ class Shipper extends Model
         return $this->belongsTo(Order::class);
     }
 }
+

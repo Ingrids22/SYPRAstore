@@ -53,14 +53,18 @@ class OrderController extends Controller
 
     public function show($id)
     {
-        $order = Order::with('payment', 'customer')->find($id);
+        $order = Order::with(['payment', 'customer', 'shipper'])->find($id);
     
         if (!$order) {
             abort(404, 'Order not found');
         }
     
-        return view('cliente.order_detail', ['order' => $order]);
+        return view('cliente.order_detail', [
+            'order' => $order,
+            'shipping_address' => $order->shipper // Asumiendo que tienes la relación y la dirección de envío en shipper
+        ]);
     }
+    
     
 
     public function edit($id)
@@ -99,11 +103,12 @@ class OrderController extends Controller
     
         // Obtener todas las órdenes del cliente actual
         $orders = Order::where('customer_id', $customer_id)
-            ->with(['orderDetails.product', 'customer'])
+            ->with(['orderDetails.product', 'customer', 'shipper'])
             ->get();
     
         return view('cliente.ordenescliente', compact('orders'));
     }
+    
 
     public function crearPedido(Request $request)
     {

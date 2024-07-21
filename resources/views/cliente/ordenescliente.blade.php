@@ -24,6 +24,7 @@
                       <th>Fecha de Orden</th>
                       <th>Total</th>
                       <th>Estado</th>
+                      <th>Detalles de Envío</th>
                       <th>Acciones</th>
                   </tr>
               </thead>
@@ -38,8 +39,7 @@
                             {{ $detail->product->name }} <br>
                             - <strong>Cantidad:</strong> {{ $detail->quantity }} <br>
                             - <strong>Precio:</strong> ${{ number_format($detail->price, 2, '.', ',') }} MXN
-                        </div>
-                        
+                          </div>
                           <br>
                           @endforeach
                       </td>
@@ -55,12 +55,24 @@
                       <td>{{ $order->status }}</td>
                       @endif        
                       <td>
+                        @if($order->shipper)
+                            <strong>Tracking Number:</strong> {{ $order->shipper->tracking_number }} <br>
+                            <strong>Phone:</strong> {{ $order->shipper->phone }} <br>
+                            <strong>Parcel:</strong> {{ $order->shipper->parcel }} <br>
+                            <strong>Shipping Date:</strong> {{ $order->shipper->shipping_date }} <br>
+                            <strong>Arrival Date:</strong> {{ $order->shipper->arrival_date }} <br>
+                            <img src="{{ asset('storage/' . $order->shipper->image) }}" width="100" class="img-responsive"/>
+                        @else
+                            No disponible
+                        @endif
+                      </td>
+                      <td>
                         <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-primary">Ver detalles</a>
                       </td>
                   </tr>
                   @empty
                   <tr>
-                      <td colspan="7" class="text-center">No tienes órdenes.</td>
+                      <td colspan="8" class="text-center">No tienes órdenes.</td>
                   </tr>
                   @endforelse
               </tbody>

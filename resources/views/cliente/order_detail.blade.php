@@ -34,6 +34,8 @@
                         No hay información de pago disponible.
                     </div>
                 @endif
+
+                <a href="{{ route('cliente.ordenescliente') }}" class="btn btn-sm btn-primary mt-4">Volver a órdenes</a>
             </div>
         </div>
     </div>

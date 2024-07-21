@@ -78,13 +78,16 @@ class PaymentController extends Controller
                 return $response->getMessage();
             }
         } else {
-            return 'Payment declined!';
+            return view('cliente.ordenescliente');
         }
     }
     
 
-    public function error()
+    public function error(Request $request)
     {
-        return 'User declined the payment!';
+        // Suponiendo que tienes un modelo `Order` y quieres obtener las órdenes del cliente autenticado
+        $orders = Order::where('customer_id', $request->user()->id)->get();
+    
+        return view('cliente.ordenescliente', ['orders' => $orders]);
     }
 }
