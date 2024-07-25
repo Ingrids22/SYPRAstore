@@ -51,7 +51,7 @@
                             <br>
                             <a href="{{ route('metodo_pago', ['orderId' => $order->id]) }}" class="btn btn-sm btn-success">Ir a método de pago</a>
                         @elseif ($order->status === 'ENVIADO')
-                            Enviado
+                            ENVIADO
                         @else
                             {{ $order->status }}
                         @endif

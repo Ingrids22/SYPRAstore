@@ -27,18 +27,14 @@ class OrderController extends Controller
         
         return view('cliente.payment', compact('order'));
     }
-    public function index() // Método para mostrar los pedidos
+    public function index()
     {
-        // Verifica si el usuario está autenticado
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Debes iniciar sesión para ver tus pedidos.');
-        }
-        
         $user = Auth::user();
         $orders = $user->orders; // Suponiendo que la relación entre usuario y pedidos se llama 'orders'
         
         return view('cliente.ordenescliente', compact('orders'));
     }
+    
 
     public function create()
     {
@@ -128,8 +124,6 @@ class OrderController extends Controller
     
         return view('cliente.ordenescliente', compact('orders'));
     }
-    
-    
     
 
     public function crearPedido(Request $request)
