@@ -3,6 +3,7 @@
 use App\Http\Controllers\cliente\ProductoCatalogoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\Adminauth\AdminAuthController;
 use App\Http\Controllers\AdminProfileController;
@@ -10,10 +11,31 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
 
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/google-auth/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/google-auth/callback', function () {
+    $user_google = Socialite::driver('google')->stateless()->user();
+
+    $user = User::updateOrCreate([
+        'google_id' => $user_google->id,
+    ], [
+        'name' => $user_google->name,
+        'email' => $user_google->email,
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard');
 });
 
 Route::get('/dashboard', function () {
