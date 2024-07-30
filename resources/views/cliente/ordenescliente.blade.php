@@ -58,14 +58,14 @@
                       </td>
                       <td>
                         @if($order->shipper)
-                            <strong>Tracking Number:</strong> {{ $order->shipper->tracking_number }} <br>
-                            <strong>Phone:</strong> {{ $order->shipper->phone }} <br>
-                            <strong>Parcel:</strong> {{ $order->shipper->parcel }} <br>
-                            <strong>Shipping Date:</strong> {{ $order->shipper->shipping_date }} <br>
-                            <strong>Arrival Date:</strong> {{ $order->shipper->arrival_date }} <br>
+                            <strong>Número de guía:</strong> {{ $order->shipper->tracking_number }} <br>
+                            <strong>Telefóno:</strong> {{ $order->shipper->phone }} <br>
+                            <strong>Paqueteria:</strong> {{ $order->shipper->parcel }} <br>
+                            <strong>Fecha de envío:</strong> {{ $order->shipper->shipping_date }} <br>
+                            <strong>Fecha de llegada:</strong> {{ $order->shipper->arrival_date }} <br>
                             <img src="{{ asset('storage/' . $order->shipper->image) }}" width="100" class="img-responsive"/>
                         @else
-                            No disponible
+                            No enviado
                         @endif
                       </td>
                       <td>

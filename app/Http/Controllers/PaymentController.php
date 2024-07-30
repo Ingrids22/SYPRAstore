@@ -42,7 +42,6 @@ class PaymentController extends Controller
             return $th->getMessage();
         }
     }
-
     public function success(Request $request)
     {
         if ($request->input('paymentId') && $request->input('PayerID')) {
@@ -59,20 +58,29 @@ class PaymentController extends Controller
                 $payment->payer_id = $arr['payer']['payer_info']['payer_id'];
                 $payment->payer_email = $arr['payer']['payer_info']['email'];
                 $payment->amount = $arr['transactions'][0]['amount']['total'];
-                $payment->currency = 'MXN'; // O usa env('PAYPAL_CURRENCY', 'MXN') si prefieres
+                $payment->currency = 'MXN';
                 $payment->save();
     
-                // Actualizar el pedido con el payment_id
                 $order = Order::find($request->order_id);
                 $order->payment_id = $payment->id;
                 $order->status = 'PAGADO';
+    
+                // Obtener y guardar la dirección de envío
+                $shipping_address = $arr['payer']['payer_info']['shipping_address'];
+                $order->shipping_recipient_name = $shipping_address['recipient_name'];
+                $order->shipping_line1 = $shipping_address['line1'];
+                $order->shipping_line2 = $shipping_address['line2'] ?? '';
+                $order->shipping_city = $shipping_address['city'];
+                $order->shipping_state = $shipping_address['state'];
+                $order->shipping_postal_code = $shipping_address['postal_code'];
+                $order->shipping_country_code = $shipping_address['country_code'];
                 $order->save();
     
-                // Pasar los datos a la vista
                 return view('cliente.payment_success', [
                     'transactionId' => $arr['id'],
                     'payment' => $payment,
-                    'order' => $order
+                    'order' => $order,
+                    'shipping_address' => $shipping_address
                 ]);
             } else {
                 return $response->getMessage();
