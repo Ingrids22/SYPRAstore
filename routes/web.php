@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\CustomerAuthController;
+use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Adminauth\AdminAuthController;
 use App\Http\Controllers\AdminProfileController;
 use App\Http\Controllers\OrderController;
@@ -19,24 +20,28 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/google-auth/redirect', function () {
-    return Socialite::driver('google')->redirect();
-});
+// Route::get('/google-auth/redirect', function () {
+//     return Socialite::driver('google')->redirect();
+// });
 
-Route::get('/google-auth/callback', function () {
-    $user_google = Socialite::driver('google')->stateless()->user();
+// Route::get('/google-auth/callback', function () {
+//     $user_google = Socialite::driver('google')->stateless()->user();
 
-    $user = User::updateOrCreate([
-        'google_id' => $user_google->id,
-    ], [
-        'name' => $user_google->name,
-        'email' => $user_google->email,
-    ]);
+//     $user = User::updateOrCreate([
+//         'google_id' => $user_google->id,
+//     ], [
+//         'name' => $user_google->name,
+//         'email' => $user_google->email,
+//     ]);
 
-    Auth::login($user);
+//     Auth::login($user);
 
-    return redirect('/dashboard');
-});
+//     return redirect('/dashboard');
+// });
+
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+// Route::get('auth/google/callback', [CustomerAuthController::class, 'registerGoogleUser']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

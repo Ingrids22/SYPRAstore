@@ -27,7 +27,11 @@
                     @auth
                         <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
                     @else
-                    <a href="/google-auth/redirect" class="text-sm text-gray-700 dark:text-gray-500 underline">SSO Google</a>
+                    <div class="col-md-8 offset-md-4">
+                        <a href="{{ route('google.login') }}" class="btn btn-danger">
+                            {{ __('Iniciar sesión con Google') }}
+                        </a>
+                    </div>
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
                         @if (Route::has('register'))
