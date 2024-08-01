@@ -43,7 +43,7 @@ class AdminAuthController extends Controller
 
         Auth::guard('admin')->login($admin);
 
-        return redirect('/admin/home');
+        return redirect('/admin/dashboard');
     }
 
     protected function validator(array $data)

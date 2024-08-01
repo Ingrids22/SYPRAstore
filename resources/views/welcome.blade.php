@@ -28,7 +28,7 @@
                         <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
                     @else
                     <div class="col-md-8 offset-md-4">
-                        <a href="{{ route('google.login') }}" class="btn btn-danger">
+                        <a href="{{ route('google.login') }}" class="btn btn-danger  text-gray-700 dark:text-gray-500">
                             {{ __('Iniciar sesión con Google') }}
                         </a>
                     </div>

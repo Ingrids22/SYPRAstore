@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Providers\RouteServiceProvider;
@@ -11,15 +12,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Mail\BienvenidaCliente;
+use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
-    protected function redirectTo(){
+    protected function redirectTo()
+    {
         $user = Auth::user(); // Obtener el usuario autenticado
         if ($user && $user->hasRole('cliente')) { // Verificar si el usuario tiene el rol 'cliente'
             return "/carrito/procesopedido";
         }
     }
+
     /**
      * Display the registration view.
      */
@@ -57,13 +62,14 @@ class RegisteredUserController extends Controller
             'status' => 'ACTIVO',
             'role' => 'customer', 
         ]);
-    
+
         event(new Registered($customer));
         Auth::guard('customer')->login($customer);
 
-        Auth::login($customer);
+        // Enviar el correo de bienvenida
+        Mail::to($customer->email)->send(new BienvenidaCliente($customer));
 
         return redirect(RouteServiceProvider::HOME);
     }
-
 }
+

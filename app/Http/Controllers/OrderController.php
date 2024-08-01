@@ -2,31 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NotificacionesDeVentas;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
     public function __construct()
-{
-    $this->middleware('auth');
-}
+    {
+        $this->middleware('auth');
+    }
 
     public function showPaymentMethod($orderId)
     {
-        $order = Order::find($orderId);
-        
+        $order = Order::with('shipper')->find($orderId);
+
         if (!$order) {
             // Manejo de error si el pedido no se encuentra
             return redirect()->back()->with('error', 'Order not found.');
         }
-        
-        return view('cliente.payment', compact('order'));
+
+        $shipping_address = $order->shipper; // Asumiendo que tienes la relación y la dirección de envío en shipper
+
+        return view('cliente.payment', compact('order', 'shipping_address'));
     }
+
     public function index()
     {
         $user = Auth::user();
@@ -34,7 +39,6 @@ class OrderController extends Controller
         
         return view('cliente.ordenescliente', compact('orders'));
     }
-    
 
     public function create()
     {
@@ -70,8 +74,6 @@ class OrderController extends Controller
         ]);
     }
     
-    
-
     public function edit($id)
     {
         $order = Order::find($id);
@@ -124,7 +126,6 @@ class OrderController extends Controller
     
         return view('cliente.ordenescliente', compact('orders'));
     }
-    
 
     public function crearPedido(Request $request)
     {
@@ -170,6 +171,8 @@ class OrderController extends Controller
             $request->session()->forget('cart');
     
             DB::commit();
+
+            Mail::to($user->email)->send(new NotificacionesDeVentas($order));
     
             return redirect()->route('orders.index')->with('success', 'Pedido creado exitosamente.');
         } catch (\Exception $e) {
@@ -177,7 +180,5 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Error al crear el pedido: ' . $e->getMessage());
         }
     }
-    
-    
-    
 }
+
