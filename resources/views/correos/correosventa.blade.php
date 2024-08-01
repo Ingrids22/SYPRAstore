@@ -1,9 +1,3 @@
-@extends('cliente/plantilla/app')
-
-@section('Titulo', 'SYPRA')
-
-@section('contenido')
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +26,3 @@
     <p>Tu Tienda</p>
 </body>
 </html>
-
-
-@endsection
