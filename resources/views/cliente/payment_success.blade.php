@@ -15,11 +15,15 @@
     <p>Estado del pedido: {{ $order->status }}</p>
 
     <h2>Dirección de Envío:</h2>
-    <p>{{ $shipping_address['recipient_name'] }}</p>
-    <p>{{ $shipping_address['line1'] }}</p>
-    <p>{{ $shipping_address['line2'] ?? '' }}</p>
-    <p>{{ $shipping_address['city'] }}, {{ $shipping_address['state'] }} {{ $shipping_address['postal_code'] }}</p>
-    <p>{{ $shipping_address['country_code'] }}</p>
+    @if($shipping_address)
+        <p>{{ $shipping_address['recipient_name'] }}</p>
+        <p>{{ $shipping_address['line1'] }}</p>
+        <p>{{ $shipping_address['line2'] ?? '' }}</p>
+        <p>{{ $shipping_address['city'] }}, {{ $shipping_address['state'] }} {{ $shipping_address['postal_code'] }}</p>
+        <p>{{ $shipping_address['country_code'] }}</p>
+    @else
+        <p>Dirección de envío no disponible</p>
+    @endif
 
     <a href="{{ route('cliente.ordenescliente') }}" class="btn btn-sm btn-primary">Volver a órdenes</a>
 </div>
